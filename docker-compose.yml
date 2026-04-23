@@ -1,0 +1,211 @@
+services:
+
+  nginx:
+    image: nginx:1.19.0
+    container_name: nginx
+    restart: always
+
+    ports:
+      - "8080:80"
+
+    volumes:
+      - /var/www/html:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+
+    depends_on:
+      - wordpress1
+      - wordpress2
+      - wordpress3
+      # - wordpress4
+      # - wordpress5
+
+    networks:
+      - wp_network
+
+  wordpress1:
+    image: wordpress:5.4.2-php7.2-apache
+    container_name: wordpress1
+    restart: always
+
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_NAME: wordpressdb
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword
+
+    volumes:
+      - /var/www/html:/var/www/html
+
+    depends_on:
+      - mysql
+
+    command: >
+      sh -c "
+      until php -r '
+        mysqli_connect(\"mysql\",\"wpuser\",\"wppassword\",\"wordpressdb\") or exit(1);
+      ';
+      do
+        echo Esperando MySQL...;
+        sleep 2;
+      done;
+      apache2-foreground
+      "
+
+    networks:
+      - wp_network
+
+
+  wordpress2:
+    image: wordpress:5.4.2-php7.2-apache
+    container_name: wordpress2
+    restart: always
+
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_NAME: wordpressdb
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword
+
+    volumes:
+      - /var/www/html:/var/www/html
+
+    depends_on:
+      - mysql
+
+    command: >
+      sh -c "
+      until php -r '
+        mysqli_connect(\"mysql\",\"wpuser\",\"wppassword\",\"wordpressdb\") or exit(1);
+      ';
+      do
+        echo Esperando MySQL...;
+        sleep 2;
+      done;
+      apache2-foreground
+      "
+
+    networks:
+      - wp_network
+
+
+  wordpress3:
+    image: wordpress:5.4.2-php7.2-apache
+    container_name: wordpress3
+    restart: always
+
+    environment:
+      WORDPRESS_DB_HOST: mysql:3306
+      WORDPRESS_DB_NAME: wordpressdb
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wppassword
+
+    volumes:
+      - /var/www/html:/var/www/html
+
+    depends_on:
+      - mysql
+
+    command: >
+      sh -c "
+      until php -r '
+        mysqli_connect(\"mysql\",\"wpuser\",\"wppassword\",\"wordpressdb\") or exit(1);
+      ';
+      do
+        echo Esperando MySQL...;
+        sleep 2;
+      done;
+      apache2-foreground
+      "
+
+    networks:
+      - wp_network
+
+
+  # wordpress4:
+  #   image: wordpress:5.4.2-php7.2-apache
+  #   container_name: wordpress4
+  #   restart: always
+
+  #   environment:
+  #     WORDPRESS_DB_HOST: mysql:3306
+  #     WORDPRESS_DB_NAME: wordpressdb
+  #     WORDPRESS_DB_USER: wpuser
+  #     WORDPRESS_DB_PASSWORD: wppassword
+
+  #   volumes:
+  #     - /var/www/html:/var/www/html
+
+  #   depends_on:
+  #     - mysql
+
+  #   command: >
+  #     sh -c "
+  #     until php -r '
+  #       mysqli_connect(\"mysql\",\"wpuser\",\"wppassword\",\"wordpressdb\") or exit(1);
+  #     ';
+  #     do
+  #       echo Esperando MySQL...;
+  #       sleep 2;
+  #     done;
+  #     apache2-foreground
+  #     "
+
+  #   networks:
+  #     - wp_network
+
+  # wordpress5:
+  #   image: wordpress:5.4.2-php7.2-apache
+  #   container_name: wordpress5
+  #   restart: always
+
+  #   environment:
+  #     WORDPRESS_DB_HOST: mysql:3306
+  #     WORDPRESS_DB_NAME: wordpressdb
+  #     WORDPRESS_DB_USER: wpuser
+  #     WORDPRESS_DB_PASSWORD: wppassword
+
+  #   volumes:
+  #     - /var/www/html:/var/www/html
+
+  #   depends_on:
+  #     - mysql
+
+  #   command: >
+  #     sh -c "
+  #     until php -r '
+  #       mysqli_connect(\"mysql\",\"wpuser\",\"wppassword\",\"wordpressdb\") or exit(1);
+  #     ';
+  #     do
+  #       echo Esperando MySQL...;
+  #       sleep 2;
+  #     done;
+  #     apache2-foreground
+  #     "
+
+  #   networks:
+  #     - wp_network
+      
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpressdb
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wppassword
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+    networks:
+      - wp_network
+
+volumes:
+  mysql_data:
+
+
+networks:
+  wp_network:
+    driver: bridge

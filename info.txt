@@ -1,0 +1,25 @@
+post blog imagem de 1mb - /?p=14
+post blog imagem de 300kb - /?p=11
+post blog texto de 400kb - /?p=8
+
+
+teste de carga leve:
+instancias - 3
+tempo - 2m
+maximo de usuarios - 150
+usuarios por segundo - 75
+% de erro: 0
+
+teste de carga media:
+instancias - 4
+tempo - 2m
+maximo de usuarios - 300
+usuarios por segundo - 150
+% de erro: 46
+
+teste de carga pesado:
+instancias - 5
+tempo - 2m
+maximo de usuarios - 1500
+usuarios por segundo - 75
+% de erro: 81
