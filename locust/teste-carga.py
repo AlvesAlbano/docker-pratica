@@ -1,25 +1,17 @@
 from locust import HttpUser, task, between
 
-class Site(HttpUser):
-# docker restart nginx
-    host = "http://localhost:8080"
+
+class SiteWordPress(HttpUser):
     wait_time = between(1, 3)
 
-    @task
+    @task(1)
     def post_imagem_1mb(self):
-        self.client.get(
-            "/?p=14"
-        )
+        self.client.get("/?p=14", name="Post imagem 1MB")
 
-    @task
+    @task(1)
     def post_imagem_300kb(self):
-        self.client.get(
-            "/?p=11"
-        )
+        self.client.get("/?p=11", name="Post imagem 300KB")
 
-    @task
+    @task(1)
     def post_texto_400kb(self):
-        self.client.get(
-            "/?p=8"
-        )
-    
+        self.client.get("/?p=8", name="Post texto 400KB")
