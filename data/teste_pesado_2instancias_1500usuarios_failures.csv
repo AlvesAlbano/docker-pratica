@@ -1,0 +1,10 @@
+Method,Name,Error,Occurrences
+GET,Post imagem 1MB,RemoteDisconnected('Remote end closed connection without response'),472
+GET,Post imagem 1MB,HTTPError('500 Server Error: Internal Server Error for url: Post imagem 1MB'),4209
+GET,Post imagem 1MB,"ConnectionResetError(104, 'Connection reset by peer')",40
+GET,Post imagem 300KB,"ConnectionResetError(104, 'Connection reset by peer')",40
+GET,Post imagem 300KB,RemoteDisconnected('Remote end closed connection without response'),483
+GET,Post texto 400KB,"ConnectionResetError(104, 'Connection reset by peer')",37
+GET,Post imagem 300KB,HTTPError('500 Server Error: Internal Server Error for url: Post imagem 300KB'),4185
+GET,Post texto 400KB,RemoteDisconnected('Remote end closed connection without response'),475
+GET,Post texto 400KB,HTTPError('500 Server Error: Internal Server Error for url: Post texto 400KB'),4264

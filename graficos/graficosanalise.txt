@@ -1,0 +1,34 @@
+1. Tempo médio por número de usuários
+
+O gráfico mostra que o tempo médio de resposta aumenta conforme a quantidade de usuários cresce. Nas cargas leve e média, o sistema manteve tempos relativamente baixos, mas na carga pesada houve aumento expressivo, indicando saturação da aplicação quando submetida a 1500 usuários simultâneos.
+
+2. P95 por número de usuários
+
+O P95 representa o tempo de resposta observado para 95% das requisições. O gráfico mostra que, nas cargas leve e média, a maior parte das requisições foi atendida em tempos aceitáveis. Porém, na carga pesada, o P95 cresceu bastante, indicando que uma parte significativa dos usuários passou a enfrentar tempos de resposta elevados.
+
+3. Taxa de erro por número de usuários
+
+O gráfico mostra que as cargas leve e média não apresentaram falhas, mantendo erro de 0%. Já na carga pesada, a taxa de erro aumentou de forma significativa. Isso indica que o ambiente conseguiu lidar bem com cargas menores, mas atingiu seu limite quando o número de usuários chegou a 1500.
+
+4. Requisições por segundo por número de usuários
+
+O gráfico de RPS mostra a quantidade média de requisições processadas por segundo. À medida que o número de usuários aumenta, o RPS também tende a crescer. Porém, na carga pesada, esse crescimento vem acompanhado de alta taxa de falhas, mostrando que o sistema recebeu mais requisições, mas não conseguiu processar todas com sucesso.
+
+5. Tempo médio por quantidade de instâncias
+
+Esse gráfico compara o impacto da quantidade de instâncias WordPress no tempo médio de resposta. Em alguns cenários, o aumento de instâncias ajudou a distribuir melhor a carga, principalmente nas cargas média e pesada. Entretanto, os resultados também mostram que apenas aumentar instâncias não elimina todos os gargalos, pois o banco de dados e os recursos da máquina local continuam sendo compartilhados.
+
+6. P95 por quantidade de instâncias
+
+O gráfico mostra como os piores tempos de resposta variam com 1, 2 e 3 instâncias. Na carga pesada, os valores de P95 ficaram muito altos, indicando degradação perceptível para parte dos usuários. Mesmo com múltiplas instâncias, o sistema ainda sofreu sob carga extrema, mas a comparação ajuda a visualizar o comportamento da arquitetura em diferentes níveis de escalabilidade.
+
+7. Taxa de erro por quantidade de instâncias
+
+Esse é um dos gráficos mais importantes. Ele mostra que, na carga pesada, a taxa de erro foi maior com 1 instância e menor com 2 e 3 instâncias. Isso indica que o balanceamento com múltiplas instâncias contribuiu para reduzir falhas, embora não tenha eliminado completamente os erros sob carga muito alta.
+
+8. Tempo médio por tipo de conteúdo
+
+Esse gráfico compara os tempos médios dos três conteúdos testados: imagem de 1 MB, imagem de 300 KB e texto de 400 KB. Os valores ficaram relativamente próximos, indicando que, neste ambiente, o principal fator de degradação não foi apenas o tipo de conteúdo, mas principalmente o aumento da quantidade de usuários simultâneos e o limite dos recursos disponíveis.
+
+Em geral:
+Os gráficos mostram que a arquitetura apresentou bom desempenho nas cargas leve e média, com baixa latência e ausência de falhas. Na carga pesada, houve aumento expressivo no tempo de resposta e na taxa de erro, indicando saturação do ambiente. A comparação entre 1, 2 e 3 instâncias mostra que o uso de múltiplas instâncias do WordPress com Nginx como balanceador contribuiu para distribuir as requisições e reduzir falhas em alguns cenários, embora outros gargalos, como banco de dados e limitações da máquina local, ainda tenham impactado o desempenho.
