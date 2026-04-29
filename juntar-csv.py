@@ -10,7 +10,7 @@ for arquivo in pasta_raiz.rglob("*_stats.csv"):
     df = pd.read_csv(arquivo)
 
     # remove Aggregated
-    # descomenta para pegar os aggregated
+    # comenta para pegar os aggregated
     df = df[df["Name"] != "Aggregated"]
 
     partes = arquivo.parts
