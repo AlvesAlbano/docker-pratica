@@ -1,81 +1,148 @@
 import os
+import re
+from pathlib import Path
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
 
-dados = [
-    ["Carga leve", "Imagem 1MB", 1, 150, 2933, 0, 0.00, 109, 83, 270, 24.50],
-    ["Carga leve", "Imagem 300KB", 1, 150, 2803, 0, 0.00, 106, 83, 260, 23.42],
-    ["Carga leve", "Texto 400KB", 1, 150, 2864, 0, 0.00, 112, 90, 260, 23.93],
+def encontrar_pasta_resultados():
+    opcoes = [
+        Path("locust") / "resultados",
+        Path("resultados"),
+    ]
 
-    ["Carga média", "Imagem 1MB", 1, 300, 5376, 0, 0.00, 280, 210, 680, 44.84],
-    ["Carga média", "Imagem 300KB", 1, 300, 5195, 0, 0.00, 273, 190, 670, 43.33],
-    ["Carga média", "Texto 400KB", 1, 300, 5200, 0, 0.00, 289, 220, 700, 43.38],
+    for pasta in opcoes:
+        if pasta.exists():
+            return pasta
 
-    ["Carga pesada", "Imagem 1MB", 1, 1500, 14820, 12411, 83.74, 1605, 210, 9700, 123.25],
-    ["Carga pesada", "Imagem 300KB", 1, 1500, 14824, 12397, 83.63, 1583, 240, 9600, 123.28],
-    ["Carga pesada", "Texto 400KB", 1, 1500, 14823, 12399, 83.65, 1631, 240, 9700, 123.27],
+    raise FileNotFoundError(
+        "Não encontrei a pasta de resultados. "
+    )
 
-    ["Carga leve", "Imagem 1MB", 2, 150, 2793, 0, 0.00, 131, 110, 320, 23.31],
-    ["Carga leve", "Imagem 300KB", 2, 150, 2896, 0, 0.00, 130, 100, 310, 24.17],
-    ["Carga leve", "Texto 400KB", 2, 150, 2771, 0, 0.00, 141, 110, 330, 23.13],
 
-    ["Carga média", "Imagem 1MB", 2, 300, 4786, 0, 0.00, 473, 400, 1000, 40.06],
-    ["Carga média", "Imagem 300KB", 2, 300, 4854, 0, 0.00, 469, 400, 1000, 40.62],
-    ["Carga média", "Texto 400KB", 2, 300, 4841, 0, 0.00, 499, 430, 1000, 40.52],
+pasta_resultados = encontrar_pasta_resultados()
+pasta_saida = Path("graficos")
+pasta_saida.mkdir(exist_ok=True)
 
-    ["Carga pesada", "Imagem 1MB", 2, 1500, 9100, 4721, 51.88, 3609, 1600, 18000, 74.14],
-    ["Carga pesada", "Imagem 300KB", 2, 1500, 9203, 4708, 51.16, 3678, 1600, 18000, 74.98],
-    ["Carga pesada", "Texto 400KB", 2, 1500, 9261, 4776, 51.57, 3801, 1700, 19000, 75.45],
+rotulo_carga = {
+    "leve": "Carga leve",
+    "medio": "Carga média",
+    "pesado": "Carga pesada",
+}
 
-    ["Carga leve", "Imagem 1MB", 3, 150, 2722, 0, 0.00, 128, 97, 320, 22.73],
-    ["Carga leve", "Imagem 300KB", 3, 150, 2872, 0, 0.00, 133, 99, 310, 23.99],
-    ["Carga leve", "Texto 400KB", 3, 150, 2807, 0, 0.00, 135, 110, 320, 23.44],
+rotulo_cenario = {
+    "post_imagem_1mb": "Imagem 1MB",
+    "post_imagem_300kb": "Imagem 300KB",
+    "post_texto_400kb": "Texto 400KB",
+    "todos": "Todos",
+}
 
-    ["Carga média", "Imagem 1MB", 3, 300, 5409, 0, 0.00, 240, 160, 600, 45.28],
-    ["Carga média", "Imagem 300KB", 3, 300, 5304, 0, 0.00, 234, 160, 570, 44.40],
-    ["Carga média", "Texto 400KB", 3, 300, 5312, 0, 0.00, 248, 170, 600, 44.47],
+linhas = []
 
-    ["Carga pesada", "Imagem 1MB", 3, 1500, 11607, 6241, 53.77, 2489, 1100, 11000, 95.62],
-    ["Carga pesada", "Imagem 300KB", 3, 1500, 11614, 6133, 52.81, 2487, 1100, 11000, 95.68],
-    ["Carga pesada", "Texto 400KB", 3, 1500, 11877, 6309, 53.12, 2590, 1200, 12000, 97.84],
-]
+for arquivo in sorted(pasta_resultados.rglob("*_stats.csv")):
+    if arquivo.name.endswith("_stats_history.csv"):
+        continue
 
-colunas = [
-    "Teste",
-    "Conteudo",
-    "Instancias",
-    "Usuarios",
-    "Requisicoes",
-    "Falhas",
-    "Erro",
-    "TempoMedio",
-    "Mediana",
-    "P95",
-    "RPS",
-]
+    partes = arquivo.relative_to(pasta_resultados).parts
 
-df = pd.DataFrame(dados, columns=colunas)
+    if len(partes) < 4:
+        continue
 
-ordem_testes = ["Carga leve", "Carga média", "Carga pesada"]
-df["Teste"] = pd.Categorical(df["Teste"], categories=ordem_testes, ordered=True)
+    carga = partes[0]
+    instancia_txt = partes[1]
+    cenario = partes[2]
 
-pasta_saida = "graficos"
-os.makedirs(pasta_saida, exist_ok=True)
+    try:
+        instancia = int(instancia_txt.replace("instancia_", ""))
+    except ValueError:
+        continue
+
+    match_usuarios = re.search(r"_(\d+)_usuarios_stats\.csv$", arquivo.name)
+    usuarios = int(match_usuarios.group(1)) if match_usuarios else None
+
+    df_csv = pd.read_csv(arquivo)
+    agregado = df_csv[df_csv["Name"] == "Aggregated"]
+
+    if agregado.empty:
+        agregado = df_csv.tail(1)
+
+    linha = agregado.iloc[0]
+
+    requisicoes = int(linha["Request Count"])
+    falhas = int(linha["Failure Count"])
+    erro = (falhas / requisicoes * 100) if requisicoes else 0
+
+    linhas.append({
+        "Teste": rotulo_carga.get(carga, carga),
+        "Carga": carga,
+        "Conteudo": rotulo_cenario.get(cenario, cenario),
+        "Cenario": cenario,
+        "Instancias": instancia,
+        "Usuarios": usuarios,
+        "Requisicoes": requisicoes,
+        "Falhas": falhas,
+        "Erro": erro,
+        "TempoMedio": float(linha["Average Response Time"]),
+        "Mediana": float(linha["Median Response Time"]),
+        "P95": float(linha["95%"]),
+        "RPS": float(linha["Requests/s"]),
+        "ArquivoOrigem": str(arquivo),
+    })
+
+df = pd.DataFrame(linhas)
+
+if df.empty:
+    raise ValueError("Nenhum arquivo *_stats.csv válido foi encontrado.")
+
+df["Teste"] = pd.Categorical(
+    df["Teste"],
+    categories=["Carga leve", "Carga média", "Carga pesada"],
+    ordered=True
+)
+
+df["Conteudo"] = pd.Categorical(
+    df["Conteudo"],
+    categories=["Imagem 1MB", "Imagem 300KB", "Texto 400KB", "Todos"],
+    ordered=True
+)
+
+df = df.sort_values(["Teste", "Instancias", "Conteudo"]).reset_index(drop=True)
+
+df.to_csv(pasta_saida / "dados_tratados_locust_36_testes.csv", index=False, encoding="utf-8-sig")
+
+df_geral = (
+    df.groupby(["Teste", "Usuarios", "Instancias"], observed=True, as_index=False)
+      .agg({
+          "Requisicoes": "sum",
+          "Falhas": "sum",
+          "TempoMedio": "mean",
+          "Mediana": "mean",
+          "P95": "mean",
+          "RPS": "mean",
+      })
+)
+
+df_geral["Erro"] = (df_geral["Falhas"] / df_geral["Requisicoes"] * 100).fillna(0)
+df_geral = df_geral[[
+    "Teste", "Usuarios", "Instancias", "Requisicoes", "Falhas",
+    "Erro", "TempoMedio", "Mediana", "P95", "RPS"
+]]
+
+df_geral.to_csv(pasta_saida / "resumo_geral_por_carga_instancia.csv", index=False, encoding="utf-8-sig")
 
 
 def salvar_grafico(nome):
-    caminho = os.path.join(pasta_saida, nome)
     plt.tight_layout()
-    plt.savefig(caminho, dpi=300)
+    plt.savefig(pasta_saida / nome, dpi=300)
     plt.close()
 
 
 def gerar_grafico_por_usuarios(metrica, titulo, eixo_y, nome_arquivo):
     base = (
-        df.groupby(["Instancias", "Usuarios"], as_index=False)[metrica]
-        .mean()
-        .sort_values(["Instancias", "Usuarios"])
+        df.groupby(["Instancias", "Usuarios"], observed=True, as_index=False)[metrica]
+          .mean()
+          .sort_values(["Instancias", "Usuarios"])
     )
 
     plt.figure(figsize=(9, 5))
@@ -99,14 +166,14 @@ def gerar_grafico_por_usuarios(metrica, titulo, eixo_y, nome_arquivo):
 
 def gerar_grafico_por_instancias(metrica, titulo, eixo_y, nome_arquivo):
     base = (
-        df.groupby(["Teste", "Instancias"], as_index=False)[metrica]
-        .mean()
-        .sort_values(["Teste", "Instancias"])
+        df.groupby(["Teste", "Instancias"], observed=True, as_index=False)[metrica]
+          .mean()
+          .sort_values(["Teste", "Instancias"])
     )
 
     plt.figure(figsize=(9, 5))
 
-    for teste in ordem_testes:
+    for teste in ["Carga leve", "Carga média", "Carga pesada"]:
         dados_teste = base[base["Teste"] == teste]
         plt.plot(
             dados_teste["Instancias"],
@@ -126,17 +193,17 @@ def gerar_grafico_por_instancias(metrica, titulo, eixo_y, nome_arquivo):
 
 def gerar_grafico_conteudo():
     base = (
-        df.groupby(["Teste", "Conteudo"], as_index=False)["TempoMedio"]
-        .mean()
-        .sort_values(["Teste", "Conteudo"])
+        df.groupby(["Teste", "Conteudo"], observed=True, as_index=False)["TempoMedio"]
+          .mean()
+          .sort_values(["Teste", "Conteudo"])
     )
 
     tabela = base.pivot(index="Conteudo", columns="Teste", values="TempoMedio")
-    tabela = tabela[ordem_testes]
+    tabela = tabela[["Carga leve", "Carga média", "Carga pesada"]]
 
     ax = tabela.plot(kind="bar", figsize=(10, 5))
-    ax.set_title("Tempo médio por tipo de conteúdo")
-    ax.set_xlabel("Tipo de conteúdo")
+    ax.set_title("Tempo médio por cenário de conteúdo")
+    ax.set_xlabel("Cenário de conteúdo")
     ax.set_ylabel("Tempo médio (ms)")
     ax.grid(True, axis="y")
 
@@ -195,6 +262,5 @@ gerar_grafico_por_instancias(
 
 gerar_grafico_conteudo()
 
-df.to_csv(os.path.join(pasta_saida, "dados_testes_locust.csv"), index=False, encoding="utf-8-sig")
-
 print("Gráficos gerados com sucesso na pasta 'graficos'.")
+print(f"Total de cenários lidos: {len(df)}")

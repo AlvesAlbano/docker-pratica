@@ -1,13 +1,13 @@
 from locust import HttpUser, task, between
 
 
-url_postagem_imagem_1mb = "/?p=7"
-url_postagem_imagem_300kb = "/?p=9" 
-url_postagem_texto_400kb = "/?p=5"
+# url_postagem_imagem_1mb = "/?p=7"
+# url_postagem_imagem_300kb = "/?p=9" 
+# url_postagem_texto_400kb = "/?p=5"
  
-# url_postagem_imagem_1mb = "/?p=6"
-# url_postagem_imagem_300kb = "/?p=5" 
-# url_postagem_texto_400kb = "/?p=12" 
+url_postagem_imagem_1mb = "/?p=6"
+url_postagem_imagem_300kb = "/?p=9"
+url_postagem_texto_400kb = "/?p=12"
 
 class SiteWordPress(HttpUser):
     wait_time = between(1, 3)
