@@ -5,7 +5,7 @@ Autores: Samir Alves - 2315046 \
 
 # Resumo
 
-Este teste de carga analisa a disponibilidade de um serviço **WordPress** em múltiplas instancias. Foi utilizada a framework de testes de carga **Locust**, O balanceador de carga **nginx** e contêineres feitos em **Docker** foram utilizados para: Hospedagem do serviço, framework e balanceador de carga, armazenamento das postagens do blog em um banco de dados **MySQL**
+Este teste de carga analisa a disponibilidade de um serviço **WordPress** em múltiplas instancias. Foi utilizada a framework de testes de carga **Locust**, O balanceador de carga **Nginx** e contêineres feitos em **Docker** foram utilizados para: Hospedagem do serviço, framework e balanceador de carga, armazenamento das postagens do blog em um banco de dados **MySQL**
 
 # Metodologia
 
@@ -15,95 +15,106 @@ O teste carga realizado no Locust foram realizados em 3 postagens do blog.  A pr
 
 O resultados obtidos, por meio do Locust, mostraram o comportamento da disponibilidade do serviço considerando diferentes instancias disponíveis e usuários entrando por segundo.
 
-| Teste | Instâncias WordPress | Usuários simultâneos | Conteúdos acessados                      |
-| ----- | -------------------: | -------------------: | ---------------------------------------- |
-| T1    |                    1 |                  150 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T2    |                    1 |                  300 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T3    |                    1 |                 1500 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T4    |                    2 |                  150 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T5    |                    2 |                  300 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T6    |                    2 |                 1500 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T7    |                    3 |                  150 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T8    |                    3 |                  300 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T9    |                    3 |                 1500 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-
 ## 1 Instancia
+
+|Teste       |Carga |Conteudo    |Cenario          |Instancias|Usuarios|Requisicoes|Falhas|Erro|TempoMedio        |Mediana|P95   |RPS               |
+|------------|------|------------|-----------------|----------|--------|-----------|------|----|------------------|-------|------|------------------|
+|Carga leve  |leve  |Imagem 1MB  |post_imagem_1mb  |1         |150     |8303       |0     |0.0 |112.99800604287536|89.0   |260.0 |69.56984122092346 |
+|Carga leve  |leve  |Imagem 300KB|post_imagem_300kb|1         |150     |8338       |0     |0.0 |112.09446972562854|89.0   |260.0 |69.8064656618259  |
+|Carga leve  |leve  |Texto 400KB |post_texto_400kb |1         |150     |8242       |0     |0.0 |133.56153706589367|100.0  |320.0 |68.9583084981256  |
+|Carga leve  |leve  |Todos       |todos            |1         |150     |8239       |0     |0.0 |123.47462854606484|97.0   |290.0 |68.95995468250192 |
+|Carga média |medio |Imagem 1MB  |post_imagem_1mb  |1         |250     |13166      |0     |0.0 |181.60222667955287|120.0  |490.0 |110.14254371644074|
+|Carga média |medio |Imagem 300KB|post_imagem_300kb|1         |250     |12736      |0     |0.0 |236.3302077764472 |130.0  |730.0 |107.11940723336686|
+|Carga média |medio |Texto 400KB |post_texto_400kb |1         |250     |12335      |0     |0.0 |322.0372336342097 |210.0  |860.0 |103.4785971105415 |
+|Carga média |medio |Todos       |todos            |1         |250     |13179      |0     |0.0 |174.0476509580328 |130.0  |400.0 |110.1361527814864 |
+|Carga pesada|pesado|Imagem 1MB  |post_imagem_1mb  |1         |350     |13809      |0     |0.0 |817.4840177884905 |560.0  |2100.0|115.83337630517792|
+|Carga pesada|pesado|Imagem 300KB|post_imagem_300kb|1         |350     |13812      |0     |0.0 |840.152317597068  |690.0  |2200.0|115.16097794920267|
+|Carga pesada|pesado|Texto 400KB |post_texto_400kb |1         |350     |8523       |0     |0.0 |2599.8137399189177|1400.0 |7900.0|71.05431385050973 |
+|Carga pesada|pesado|Todos       |todos            |1         |350     |12728      |0     |0.0 |1068.5833967250294|900.0  |2600.0|106.79120439583888|
 
 ![imagem](data/imagens/resultados.png)
 
-| Teste      | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ---------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga leve | Imagem 1MB   |          1 |      150 |        2933 |      0 |     0,00 |              109 |           83 |      270 | 24,50 |
-| Carga leve | Imagem 300KB |          1 |      150 |        2803 |      0 |     0,00 |              106 |           83 |      260 | 23,42 |
-| Carga leve | Texto 400KB  |          1 |      150 |        2864 |      0 |     0,00 |              112 |           90 |      260 | 23,93 |
+Nos testes com 1 instancia observa-se que o serviço manteve a estabilidade em todos os cenários mesmo com o aumento de carga. Em todos os testes entravam 20 usuários por segundo
 
-| Teste       | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ----------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga média | Imagem 1MB   |          1 |      300 |        5376 |      0 |     0,00 |              280 |          210 |      680 | 44,84 |
-| Carga média | Imagem 300KB |          1 |      300 |        5195 |      0 |     0,00 |              273 |          190 |      670 | 43,33 |
-| Carga média | Texto 400KB  |          1 |      300 |        5200 |      0 |     0,00 |              289 |          220 |      700 | 43,38 |
+Na carga leve com 150 usuários, o sistema apresentou um bom desempenho no geral. O tempo médio de resposta ficou entre 112 e 133 milissegundos, com a mediana entre 89 e 100 e P95 abaixo de 320. A taxa de requisições por segundo manteve-se na faixa de 69 reqs/s
 
-| Teste        | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |    RPS |
-| ------------ | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | -----: |
-| Carga pesada | Imagem 1MB   |          1 |     1500 |       14820 |  12411 |    83,74 |             1605 |          210 |     9700 | 123,25 |
-| Carga pesada | Imagem 300KB |          1 |     1500 |       14824 |  12397 |    83,63 |             1583 |          240 |     9600 | 123,28 |
-| Carga pesada | Texto 400KB  |          1 |     1500 |       14823 |  12399 |    83,65 |             1631 |          240 |     9700 | 123,27 |
+Na carga média, com 250 usuários, houve um aumento na latência. O tempo médio de resposta variou entre 174 e 322 milissegundos, sendo o pior a postagem do blog com o texto de 400KB. A mediana subiu para a faixa de 120 e 210 milissegundos e o P95 ficou entre 400 e 860.
 
-No teste pesado com 1 instância, o Locust indicou uso elevado de CPU e encerrou os testes precocemente. Mesmo assim, os dados foram úteis pois mostram que houve saturação do serviço web. A taxa de erro ficou em 83,67%, com falhas principalmente por RemoteDisconnected, erro HTTP 500 e ConnectionResetError. Isso indica que uma única instância do WordPress não conseguiu sustentar a carga de 1500 usuários no ambiente local.
-Na carga pesada, a diferença mais importante é a taxa de erro: com 1 instância, o erro foi 83,67%; com 3 instâncias, caiu para 53,23%. Ou seja, mesmo que o cenário pesado tenha causado instabilidade nos dois casos, aumentar o número de instâncias reduziu bastante a proporção de falhas.
+Em carga pesada, com 350 usuários, o comportamento mudou de forma mais significativa. Para as postagem no blog com imagens, o tempo médio ficou na faixa de 817 ms a 840 ms, com P95 entre 2100 ms e 2200 ms, mantendo a taxa de requisições por segundo próximo de 115 req/s. No entanto, o cenário de envio de texto de 400 KB apresentou uma baixa performance. O tempo médio atingiu aproximadamente 2600 ms, com mediana de 1400 ms e P95 chegando a 7900 ms, além de queda na taxa de requisições por segundo para cerca de 71 req/s.
+
+Nos testes de 1 instancia o serviço mostra uma ótima performance até a carga média, mas apresenta um péssimo desempenho quando a carga pesada é aplicada, especialmente no processamento da postagem com o texto. Esse problema pode ser resolvido se forem aplicada múltiplas instancias e um balanceador de carga  
 
 ## 2 Instancias
 
-| Teste      | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ---------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga leve | Imagem 1MB   |          2 |      150 |        2793 |      0 |     0,00 |              131 |          110 |      320 | 23,31 |
-| Carga leve | Imagem 300KB |          2 |      150 |        2896 |      0 |     0,00 |              130 |          100 |      310 | 24,17 |
-| Carga leve | Texto 400KB  |          2 |      150 |        2771 |      0 |     0,00 |              141 |          110 |      330 | 23,13 |
+|Teste       |Carga |Conteudo    |Cenario          |Instancias|Usuarios|Requisicoes|Falhas|Erro              |TempoMedio        |Mediana|P95   |RPS               |
+|------------|------|------------|-----------------|----------|--------|-----------|------|------------------|------------------|-------|------|------------------|
+|Carga leve  |leve  |Imagem 1MB  |post_imagem_1mb  |2         |150     |8341       |0     |0.0               |112.71683778608492|92.0   |260.0 |69.81632462996261 |
+|Carga leve  |leve  |Imagem 300KB|post_imagem_300kb|2         |150     |8318       |0     |0.0               |110.13913426592978|91.0   |260.0 |69.6338533558925  |
+|Carga leve  |leve  |Texto 400KB |post_texto_400kb |2         |150     |8154       |0     |0.0               |152.53267712618356|120.0  |370.0 |68.13975046868605 |
+|Carga leve  |leve  |Todos       |todos            |2         |150     |8299       |0     |0.0               |113.15065291710336|92.0   |250.0 |69.51450304565674 |
+|Carga média |medio |Imagem 1MB  |post_imagem_1mb  |2         |250     |12998      |0     |0.0               |203.8485631517809 |140.0  |550.0 |108.4242021598426 |
+|Carga média |medio |Imagem 300KB|post_imagem_300kb|2         |250     |13320      |0     |0.0               |161.28346832494276|120.0  |390.0 |111.2836705427109 |
+|Carga média |medio |Texto 400KB |post_texto_400kb |2         |250     |11389      |0     |0.0               |493.1439323874745 |330.0  |1500.0|95.52947169921002 |
+|Carga média |medio |Todos       |todos            |2         |250     |12500      |0     |0.0               |284.68267339648327|190.0  |790.0 |104.89667359132608|
+|Carga pesada|pesado|Imagem 1MB  |post_imagem_1mb  |2         |350     |12301      |1319  |10.72270547109991 |1152.2931435972052|1000.0 |2800.0|103.25703826062234|
+|Carga pesada|pesado|Imagem 300KB|post_imagem_300kb|2         |350     |12614      |493   |3.908355795148248 |1080.62715994617  |990.0  |2300.0|105.06572095845438|
+|Carga pesada|pesado|Texto 400KB |post_texto_400kb |2         |350     |10873      |1342  |12.342499770072656|1548.1192529416824|1400.0 |3200.0|91.29184526667046 |
+|Carga pesada|pesado|Todos       |todos            |2         |350     |13082      |921   |7.040207919278398 |993.8331471395172 |790.0  |2600.0|109.44622151855576|
 
-| Teste       | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ----------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga média | Imagem 1MB   |          2 |      300 |        4786 |      0 |     0,00 |              473 |          400 |     1000 | 40,06 |
-| Carga média | Imagem 300KB |          2 |      300 |        4854 |      0 |     0,00 |              469 |          400 |     1000 | 40,62 |
-| Carga média | Texto 400KB  |          2 |      300 |        4841 |      0 |     0,00 |              499 |          430 |     1000 | 40,52 |
+Nos testes com 2 instancias observa-se que o serviço apresentou falhas de estabilidade, especialmente na carga pesada.
 
-| Teste        | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ------------ | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga pesada | Imagem 1MB   |          2 |     1500 |        9100 |   4721 |    51,88 |             3609 |         1600 |    18000 | 74,14 |
-| Carga pesada | Imagem 300KB |          2 |     1500 |        9203 |   4708 |    51,16 |             3678 |         1600 |    18000 | 74,98 |
-| Carga pesada | Texto 400KB  |          2 |     1500 |        9261 |   4776 |    51,57 |             3801 |         1700 |    19000 | 75,45 |
+Na carga leve com 150 usuários, o desempenho do serviço manteve estável e semelhante ao teste anterior. O tempo médio de resposta ficou entre 110 e 152 milissegundos, mesmo com uma segunda instancia para fazer o balancear a carga a postagem com o texto foi a mais lenta. A mediana ficou entre 260 e 370 e P95 abaixo de 370. Os resultados indicam que não houve falhas e que o serviço está operando normalmente em múltiplas instancias.
 
-Nos testes com 2 instâncias, as cargas leve e média foram concluídas sem falhas, mantendo 0,00% de erro. Já no teste pesado, com 1500 usuários, o sistema apresentou 51,53% de erro, com falhas do tipo erro HTTP 500, conexões encerradas sem resposta e reset de conexão. Isso indica que, nesse nível de carga, a arquitetura local entrou em saturação, mesmo utilizando duas instâncias do WordPress.
+Avançando para o teste de carga média com 250 usuários, o serviço continua estável e sem falhas. Porém apresentou um aumento considerável no tempo médio de resposta variando entre 161 e 493 sendo, novamente, a causa desse variância nos dados sendo a postagem com o texto, a mediana ficou entre 120 e 330 d P95 entre 390 e 1500. Mesmo com o aumento da latência gerada pelo postagem com o texto o serviço continuou a operar normalmente e sem falhas.
+
+Por fim no teste de carga pesada com 350 usuários, o serviço já começou a apresentar sinais de instabilidade com a porcentagem de erro entre 3 e 12%, sendo a postagem com o texto sendo o mais critico de todos. As falhas consistem no erro HTTP de código 500, significando que as instâncias do serviço ficaram indisponíveis devido á alta demanda de usuários.
+
+De forma geral, o uso de 2 instâncias manteve o sistema estável até carga média, mas não conseguiu evitar a carga pesada. Além do aumento significativo na latência, surgiram taxas relevantes de erro, indicando saturação do sistema. O cenário de envio de texto de 400 KB continua sendo o principal gargalo, tanto em tempo de resposta quanto em taxa de falhas.
 
 ## 3 Instancias
 
-| Teste      | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ---------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga leve | Imagem 1MB   |          3 |      150 |        2722 |      0 |     0,00 |              128 |           97 |      320 | 22,73 |
-| Carga leve | Imagem 300KB |          3 |      150 |        2872 |      0 |     0,00 |              133 |           99 |      310 | 23,99 |
-| Carga leve | Texto 400KB  |          3 |      150 |        2807 |      0 |     0,00 |              135 |          110 |      320 | 23,44 |
+|Teste|Carga                        |Conteudo|Cenario                                      |Instancias|Usuarios|Requisicoes|Falhas|Erro              |TempoMedio        |Mediana|P95   |RPS               |
+|-----|-----------------------------|--------|---------------------------------------------|----------|--------|-----------|------|------------------|------------------|-------|------|------------------|
+|Carga leve|leve                         |Imagem 1MB|post_imagem_1mb                              |3         |150     |8212       |0     |0.0               |138.5125617852068 |100.0  |360.0 |68.64222758167365 |
+|Carga leve|leve                         |Imagem 300KB|post_imagem_300kb                            |3         |150     |8126       |0     |0.0               |162.318282650868  |110.0  |410.0 |67.89421887171122 |
+|Carga leve|leve                         |Texto 400KB|post_texto_400kb                             |3         |150     |8157       |0     |0.0               |168.03100212175903|120.0  |440.0 |68.0922715348077  |
+|Carga leve|leve                         |Todos   |todos                                        |3         |150     |8313       |0     |0.0               |125.79822916035307|100.0  |300.0 |69.54209327377154 |
+|Carga média|medio                        |Imagem 1MB|post_imagem_1mb                              |3         |250     |10632      |52    |0.4890895410082769|689.5868028791482 |510.0  |2100.0|89.04117617869204 |
+|Carga média|medio                        |Imagem 300KB|post_imagem_300kb                            |3         |250     |11614      |14    |0.1205441708283106|482.7710332746621 |320.0  |1300.0|97.33587123643856 |
+|Carga média|medio                        |Texto 400KB|post_texto_400kb                             |3         |250     |9784       |76    |0.776778413736713 |892.3905214753668 |690.0  |2000.0|82.30633177230959 |
+|Carga média|medio                        |Todos   |todos                                        |3         |250     |11793      |0     |0.0               |411.7698177708539 |280.0  |1200.0|99.1940497833036  |
+|Carga pesada|pesado                       |Imagem 1MB|post_imagem_1mb                              |3         |350     |13666      |691   |5.056344211912776 |857.3841413888813 |610.0  |2300.0|114.74867944002058|
+|Carga pesada|pesado                       |Imagem 300KB|post_imagem_300kb                            |3         |350     |14751      |51    |0.3457392719137686|656.3839697498505 |520.0  |1600.0|123.28400876771344|
+|Carga pesada|pesado                       |Texto 400KB|post_texto_400kb                             |3         |350     |11618      |1529  |13.160612842141504|1343.621980531607 |1300.0 |2900.0|97.40696003046138 |
+|Carga pesada|pesado                       |Todos   |todos                                        |3         |350     |12581      |1012  |8.043875685557587 |1108.2644768236862|830.0  |3000.0|105.24854320822764|
 
-| Teste       | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ----------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga média | Imagem 1MB   |          3 |      300 |        5409 |      0 |     0,00 |              240 |          160 |      600 | 45,28 |
-| Carga média | Imagem 300KB |          3 |      300 |        5304 |      0 |     0,00 |              234 |          160 |      570 | 44,40 |
-| Carga média | Texto 400KB  |          3 |      300 |        5312 |      0 |     0,00 |              248 |          170 |      600 | 44,47 |
+Nos testes com 3 instancias observa-se que o serviço apresentou falhas de disponibilidade, especialmente na carga média e pesada.
 
-| Teste        | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ------------ | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga pesada | Imagem 1MB   |          3 |     1500 |       11607 |   6241 |    53,77 |             2489 |         1100 |    11000 | 95,62 |
-| Carga pesada | Imagem 300KB |          3 |     1500 |       11614 |   6133 |    52,81 |             2487 |         1100 |    11000 | 95,68 |
-| Carga pesada | Texto 400KB  |          3 |     1500 |       11877 |   6309 |    53,12 |             2590 |         1200 |    12000 | 97,84 |
+Na carga leve com 150 usuários, o serviço apresentou um desempenho estável e sem falhas com tempo médio de resposta variando entre 125 e 168 milissegundos, mediana ficando entre 100 e 120 e P95 oscilando entre 300 e 440. Tudo indica que o serviço está operando sem nenhum problema.
 
-No teste de carga leve, foram utilizadas 3 instâncias do WordPress, com duração de 2 minutos, máximo de 150 usuários simultâneos e taxa de criação de 75 usuários por segundo. O teste acessou três tipos de conteúdo: um post com imagem de aproximadamente 1 MB, um post com imagem de aproximadamente 300 KB e um post com texto de aproximadamente 400 KB.
-Ao final da execução, foram realizadas 8401 requisições, sem ocorrência de falhas, resultando em uma taxa de erro de 0,00%. O tempo médio de resposta agregado foi de 132 ms, com mediana de 100 ms e tempo máximo de 1118 ms. A taxa média de requisições foi de 70,16 requisições por segundo.
-Os resultados indicam que, para a carga leve aplicada, a arquitetura com Nginx balanceando três instâncias do WordPress conseguiu atender às requisições de forma estável, sem falhas e com baixo tempo médio de resposta.
+Avançando para o teste de carga média e carga pesada tendo, respectivamente, 250 e 350 usuários o serviço começou á apresentar sinais de instabilidade devido a quantidade de usuários. Novamente, as falhas continham a mesma mensagem de erro da instancia passada, HTTP 500, sinalizando que estava ocorrendo um erro no servidor. Esse problema se deve á alta demanda de usuários que nem mesmo as três instancias do serviço conseguiram atender.  
 
-No teste de carga média, foram utilizadas 3 instâncias do WordPress, com duração de 2 minutos, máximo de 300 usuários simultâneos e taxa de criação de 150 usuários por segundo. O teste realizou 16025 requisições no total, sem ocorrência de falhas, resultando em 0,00% de erro.
-O tempo médio de resposta agregado foi de 241 ms, com mediana de 170 ms, P95 de 590 ms e P99 de 860 ms. A taxa média de requisições foi de 134,15 requisições por segundo. Em comparação com o teste leve, houve aumento no tempo médio de resposta, mas a aplicação continuou estável, sem falhas registradas.
+Para resolver esse problema de alta demanda deve-se adicionar mais instâncias para o serviço.
 
-No teste pesado, com 1500 usuários e taxa de criação de 75 usuários por segundo, a aplicação apresentou forte degradação. Foram realizadas 35098 requisições, porém 18683 falharam, resultando em 53,23% de erro. O tempo médio agregado subiu para 2523 ms e o P95 chegou a 11000 ms, indicando que parte significativa das requisições teve alto tempo de resposta.
-Os principais erros foram 500 Internal Server Error, conexões encerradas sem resposta e reset de conexão. Isso indica que a carga aplicada ultrapassou a capacidade da arquitetura local, mesmo com 3 instâncias do WordPress. Portanto, esse cenário pode ser usado para demonstrar o ponto em que o sistema deixa de se manter estável.
+# Graficos
+
+![img](./graficos/01_tempo_medio_por_usuarios.png)
+![img](./graficos/02_p95_por_usuarios.png)
+![img](./graficos/03_erro_por_usuarios.png)
+![img](./graficos/04_rps_por_usuarios.png)
+![img](./graficos/05_tempo_medio_por_instancias.png)
+![img](./graficos/06_p95_por_instancias.png)
+![img](./graficos/07_erro_por_instancias.png)
+![img](./graficos/08_tempo_medio_por_conteudo.png)
 
 # Conclusão
 
-Neste teste de carga foi analisado a disponibilidade de um serviço replicado em múltiplas instancias usando o nginx como balanceador de carga. A partir destes testes foi possível observar como o serviço se comporta com uma quantidade crescente de usuários o acessando simultaneamente ---------------
+Neste teste de carga utilizando varias, no máximo, três instâncias do serviço wordpress pode observar-se que a quantidade de usuários acessando por segundo influência no tempo de resposta e disponibilidade do serviço.
+
+Em cenários de carga leve, o serviço se manteve estável independente da quantidade de instâncias, sem ocorrência de falhas e com tempos médio de resposta baixos. Isso indique que, para baixos volumes de acesso, o serviço consegue atender a demanda de usuários de forma eficiente, sem necessidade de escalabilidade.
+
+Quando os testes avançam para o nível médio, começam a surgir sinais de instabilidade. Observa-se um aumento na latência e o surgimento de pequenas taxas de erro, principalmente na postagem que contia apenas um texto. 
+
+Em cenários de carga pesada, a instabilidade do serviço se torna evidente. É notável o aumento do tempo médio de resposta, P95 e frequência de erros, indicando a perca da disponibilidade do serviço. Além disso nota-se que o conteúdo das postagens no blog impacta diretamente o desempenho. Requisições envolvendo textos maiores apresentam consistentemente os piores resultados, tanto em latência quanto em taxa de falhas.
+
+Desse forma, conclui-se que o aumento no número de usuários por segundo afeta negativamente a disponibilidade e o desempenhando do sistema, e que a simples adição de instâncias não é suficiente para garantir uma escalabilidade eficiente. Sendo necessário investigar e otimizar componentes críticos da serviço.

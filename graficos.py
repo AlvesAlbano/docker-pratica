@@ -87,7 +87,7 @@ for arquivo in sorted(pasta_resultados.rglob("*_stats.csv")):
         "Mediana": float(linha["Median Response Time"]),
         "P95": float(linha["95%"]),
         "RPS": float(linha["Requests/s"]),
-        "ArquivoOrigem": str(arquivo),
+        # "ArquivoOrigem": str(arquivo),
     })
 
 df = pd.DataFrame(linhas)
