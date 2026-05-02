@@ -32,8 +32,6 @@ O resultados obtidos, por meio do Locust, mostraram o comportamento da disponibi
 |Carga pesada|pesado|Texto 400KB |post_texto_400kb |1         |350     |8523       |0     |0.0 |2599.8137399189177|1400.0 |7900.0|71.05431385050973 |
 |Carga pesada|pesado|Todos       |todos            |1         |350     |12728      |0     |0.0 |1068.5833967250294|900.0  |2600.0|106.79120439583888|
 
-![imagem](data/imagens/resultados.png)
-
 Nos testes com 1 instancia observa-se que o serviço manteve a estabilidade em todos os cenários mesmo com o aumento de carga. Em todos os testes entravam 20 usuários por segundo
 
 Na carga leve com 150 usuários, o sistema apresentou um bom desempenho no geral. O tempo médio de resposta ficou entre 112 e 133 milissegundos, com a mediana entre 89 e 100 e P95 abaixo de 320. A taxa de requisições por segundo manteve-se na faixa de 69 reqs/s
