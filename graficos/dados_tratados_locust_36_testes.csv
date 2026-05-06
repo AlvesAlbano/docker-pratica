@@ -1,37 +1,37 @@
 ﻿Teste,Carga,Conteudo,Cenario,Instancias,Usuarios,Requisicoes,Falhas,Erro,TempoMedio,Mediana,P95,RPS,ArquivoOrigem
-Carga leve,leve,Imagem 1MB,post_imagem_1mb,1,150,8303,0,0.0,112.99800604287536,89.0,260.0,69.56984122092346,locust\resultados\leve\instancia_1\post_imagem_1mb\post_imagem_1mb_150_usuarios_stats.csv
-Carga leve,leve,Imagem 300KB,post_imagem_300kb,1,150,8338,0,0.0,112.09446972562854,89.0,260.0,69.8064656618259,locust\resultados\leve\instancia_1\post_imagem_300kb\post_imagem_300kb_150_usuarios_stats.csv
-Carga leve,leve,Texto 400KB,post_texto_400kb,1,150,8242,0,0.0,133.56153706589367,100.0,320.0,68.9583084981256,locust\resultados\leve\instancia_1\post_texto_400kb\post_texto_400kb_150_usuarios_stats.csv
-Carga leve,leve,Todos,todos,1,150,8239,0,0.0,123.47462854606484,97.0,290.0,68.95995468250192,locust\resultados\leve\instancia_1\todos\todos_150_usuarios_stats.csv
-Carga leve,leve,Imagem 1MB,post_imagem_1mb,2,150,8341,0,0.0,112.71683778608492,92.0,260.0,69.81632462996261,locust\resultados\leve\instancia_2\post_imagem_1mb\post_imagem_1mb_150_usuarios_stats.csv
-Carga leve,leve,Imagem 300KB,post_imagem_300kb,2,150,8318,0,0.0,110.13913426592978,91.0,260.0,69.6338533558925,locust\resultados\leve\instancia_2\post_imagem_300kb\post_imagem_300kb_150_usuarios_stats.csv
-Carga leve,leve,Texto 400KB,post_texto_400kb,2,150,8154,0,0.0,152.53267712618356,120.0,370.0,68.13975046868605,locust\resultados\leve\instancia_2\post_texto_400kb\post_texto_400kb_150_usuarios_stats.csv
-Carga leve,leve,Todos,todos,2,150,8299,0,0.0,113.15065291710336,92.0,250.0,69.51450304565674,locust\resultados\leve\instancia_2\todos\todos_150_usuarios_stats.csv
-Carga leve,leve,Imagem 1MB,post_imagem_1mb,3,150,8212,0,0.0,138.5125617852068,100.0,360.0,68.64222758167365,locust\resultados\leve\instancia_3\post_imagem_1mb\post_imagem_1mb_150_usuarios_stats.csv
-Carga leve,leve,Imagem 300KB,post_imagem_300kb,3,150,8126,0,0.0,162.318282650868,110.0,410.0,67.89421887171122,locust\resultados\leve\instancia_3\post_imagem_300kb\post_imagem_300kb_150_usuarios_stats.csv
-Carga leve,leve,Texto 400KB,post_texto_400kb,3,150,8157,0,0.0,168.03100212175903,120.0,440.0,68.0922715348077,locust\resultados\leve\instancia_3\post_texto_400kb\post_texto_400kb_150_usuarios_stats.csv
-Carga leve,leve,Todos,todos,3,150,8313,0,0.0,125.79822916035307,100.0,300.0,69.54209327377154,locust\resultados\leve\instancia_3\todos\todos_150_usuarios_stats.csv
-Carga média,medio,Imagem 1MB,post_imagem_1mb,1,250,13166,0,0.0,181.60222667955287,120.0,490.0,110.14254371644074,locust\resultados\medio\instancia_1\post_imagem_1mb\post_imagem_1mb_250_usuarios_stats.csv
-Carga média,medio,Imagem 300KB,post_imagem_300kb,1,250,12736,0,0.0,236.3302077764472,130.0,730.0,107.11940723336686,locust\resultados\medio\instancia_1\post_imagem_300kb\post_imagem_300kb_250_usuarios_stats.csv
-Carga média,medio,Texto 400KB,post_texto_400kb,1,250,12335,0,0.0,322.0372336342097,210.0,860.0,103.4785971105415,locust\resultados\medio\instancia_1\post_texto_400kb\post_texto_400kb_250_usuarios_stats.csv
-Carga média,medio,Todos,todos,1,250,13179,0,0.0,174.0476509580328,130.0,400.0,110.1361527814864,locust\resultados\medio\instancia_1\todos\todos_250_usuarios_stats.csv
-Carga média,medio,Imagem 1MB,post_imagem_1mb,2,250,12998,0,0.0,203.8485631517809,140.0,550.0,108.4242021598426,locust\resultados\medio\instancia_2\post_imagem_1mb\post_imagem_1mb_250_usuarios_stats.csv
-Carga média,medio,Imagem 300KB,post_imagem_300kb,2,250,13320,0,0.0,161.28346832494276,120.0,390.0,111.2836705427109,locust\resultados\medio\instancia_2\post_imagem_300kb\post_imagem_300kb_250_usuarios_stats.csv
-Carga média,medio,Texto 400KB,post_texto_400kb,2,250,11389,0,0.0,493.1439323874745,330.0,1500.0,95.52947169921002,locust\resultados\medio\instancia_2\post_texto_400kb\post_texto_400kb_250_usuarios_stats.csv
-Carga média,medio,Todos,todos,2,250,12500,0,0.0,284.68267339648327,190.0,790.0,104.89667359132608,locust\resultados\medio\instancia_2\todos\todos_250_usuarios_stats.csv
-Carga média,medio,Imagem 1MB,post_imagem_1mb,3,250,10632,52,0.4890895410082769,689.5868028791482,510.0,2100.0,89.04117617869204,locust\resultados\medio\instancia_3\post_imagem_1mb\post_imagem_1mb_250_usuarios_stats.csv
-Carga média,medio,Imagem 300KB,post_imagem_300kb,3,250,11614,14,0.12054417082831066,482.7710332746621,320.0,1300.0,97.33587123643856,locust\resultados\medio\instancia_3\post_imagem_300kb\post_imagem_300kb_250_usuarios_stats.csv
-Carga média,medio,Texto 400KB,post_texto_400kb,3,250,9784,76,0.776778413736713,892.3905214753668,690.0,2000.0,82.30633177230959,locust\resultados\medio\instancia_3\post_texto_400kb\post_texto_400kb_250_usuarios_stats.csv
-Carga média,medio,Todos,todos,3,250,11793,0,0.0,411.7698177708539,280.0,1200.0,99.1940497833036,locust\resultados\medio\instancia_3\todos\todos_250_usuarios_stats.csv
-Carga pesada,pesado,Imagem 1MB,post_imagem_1mb,1,350,13809,0,0.0,817.4840177884905,560.0,2100.0,115.83337630517792,locust\resultados\pesado\instancia_1\post_imagem_1mb\post_imagem_1mb_350_usuarios_stats.csv
-Carga pesada,pesado,Imagem 300KB,post_imagem_300kb,1,350,13812,0,0.0,840.152317597068,690.0,2200.0,115.16097794920267,locust\resultados\pesado\instancia_1\post_imagem_300kb\post_imagem_300kb_350_usuarios_stats.csv
-Carga pesada,pesado,Texto 400KB,post_texto_400kb,1,350,8523,0,0.0,2599.8137399189177,1400.0,7900.0,71.05431385050973,locust\resultados\pesado\instancia_1\post_texto_400kb\post_texto_400kb_350_usuarios_stats.csv
-Carga pesada,pesado,Todos,todos,1,350,12728,0,0.0,1068.5833967250294,900.0,2600.0,106.79120439583888,locust\resultados\pesado\instancia_1\todos\todos_350_usuarios_stats.csv
-Carga pesada,pesado,Imagem 1MB,post_imagem_1mb,2,350,12301,1319,10.72270547109991,1152.2931435972052,1000.0,2800.0,103.25703826062234,locust\resultados\pesado\instancia_2\post_imagem_1mb\post_imagem_1mb_350_usuarios_stats.csv
-Carga pesada,pesado,Imagem 300KB,post_imagem_300kb,2,350,12614,493,3.908355795148248,1080.62715994617,990.0,2300.0,105.06572095845438,locust\resultados\pesado\instancia_2\post_imagem_300kb\post_imagem_300kb_350_usuarios_stats.csv
-Carga pesada,pesado,Texto 400KB,post_texto_400kb,2,350,10873,1342,12.342499770072656,1548.1192529416824,1400.0,3200.0,91.29184526667046,locust\resultados\pesado\instancia_2\post_texto_400kb\post_texto_400kb_350_usuarios_stats.csv
-Carga pesada,pesado,Todos,todos,2,350,13082,921,7.040207919278398,993.8331471395172,790.0,2600.0,109.44622151855576,locust\resultados\pesado\instancia_2\todos\todos_350_usuarios_stats.csv
-Carga pesada,pesado,Imagem 1MB,post_imagem_1mb,3,350,13666,691,5.056344211912776,857.3841413888813,610.0,2300.0,114.74867944002058,locust\resultados\pesado\instancia_3\post_imagem_1mb\post_imagem_1mb_350_usuarios_stats.csv
-Carga pesada,pesado,Imagem 300KB,post_imagem_300kb,3,350,14751,51,0.3457392719137686,656.3839697498505,520.0,1600.0,123.28400876771344,locust\resultados\pesado\instancia_3\post_imagem_300kb\post_imagem_300kb_350_usuarios_stats.csv
-Carga pesada,pesado,Texto 400KB,post_texto_400kb,3,350,11618,1529,13.160612842141505,1343.621980531607,1300.0,2900.0,97.40696003046138,locust\resultados\pesado\instancia_3\post_texto_400kb\post_texto_400kb_350_usuarios_stats.csv
-Carga pesada,pesado,Todos,todos,3,350,12581,1012,8.043875685557587,1108.2644768236862,830.0,3000.0,105.24854320822764,locust\resultados\pesado\instancia_3\todos\todos_350_usuarios_stats.csv
+Carga leve,leve,Imagem 1MB,post_imagem_1mb,1,150,3524,0,0.0,21.474736280362546,19.0,34.0,71.7384404991581,locust\resultados\leve\instancia_1\post_imagem_1mb\post_imagem_1mb_150_usuarios_stats.csv
+Carga leve,leve,Imagem 300KB,post_imagem_300kb,1,150,3549,0,0.0,14.99764743392707,13.0,23.0,72.19665718894618,locust\resultados\leve\instancia_1\post_imagem_300kb\post_imagem_300kb_150_usuarios_stats.csv
+Carga leve,leve,Texto 400KB,post_texto_400kb,1,150,3307,0,0.0,150.93854319292842,110.0,340.0,67.14768563648262,locust\resultados\leve\instancia_1\post_texto_400kb\post_texto_400kb_150_usuarios_stats.csv
+Carga leve,leve,Todos,todos,1,150,3482,0,0.0,53.93598321108666,22.0,130.0,70.79746340647785,locust\resultados\leve\instancia_1\todos\todos_150_usuarios_stats.csv
+Carga leve,leve,Imagem 1MB,post_imagem_1mb,2,150,3507,0,0.0,22.07252214598553,19.0,38.0,71.36405564134132,locust\resultados\leve\instancia_2\post_imagem_1mb\post_imagem_1mb_150_usuarios_stats.csv
+Carga leve,leve,Imagem 300KB,post_imagem_300kb,2,150,3564,0,0.0,15.231690923961525,13.0,23.0,72.52212860608093,locust\resultados\leve\instancia_2\post_imagem_300kb\post_imagem_300kb_150_usuarios_stats.csv
+Carga leve,leve,Texto 400KB,post_texto_400kb,2,150,3354,0,0.0,133.5065781666696,100.0,320.0,68.20765094327506,locust\resultados\leve\instancia_2\post_texto_400kb\post_texto_400kb_150_usuarios_stats.csv
+Carga leve,leve,Todos,todos,2,150,3454,0,0.0,55.51822137522048,23.0,140.0,70.26505504952658,locust\resultados\leve\instancia_2\todos\todos_150_usuarios_stats.csv
+Carga leve,leve,Imagem 1MB,post_imagem_1mb,3,150,3554,0,0.0,22.265241016325803,19.0,40.0,72.28518835858733,locust\resultados\leve\instancia_3\post_imagem_1mb\post_imagem_1mb_150_usuarios_stats.csv
+Carga leve,leve,Imagem 300KB,post_imagem_300kb,3,150,3580,0,0.0,15.16554608463431,13.0,23.0,72.85643081930897,locust\resultados\leve\instancia_3\post_imagem_300kb\post_imagem_300kb_150_usuarios_stats.csv
+Carga leve,leve,Texto 400KB,post_texto_400kb,3,150,3348,0,0.0,148.7589332401442,110.0,380.0,67.98257771320446,locust\resultados\leve\instancia_3\post_texto_400kb\post_texto_400kb_150_usuarios_stats.csv
+Carga leve,leve,Todos,todos,3,150,3443,0,0.0,56.30165062011071,22.0,150.0,70.03550567709243,locust\resultados\leve\instancia_3\todos\todos_150_usuarios_stats.csv
+Carga média,medio,Imagem 1MB,post_imagem_1mb,1,250,5684,0,0.0,22.7940250103808,19.0,47.0,115.5916021168868,locust\resultados\medio\instancia_1\post_imagem_1mb\post_imagem_1mb_250_usuarios_stats.csv
+Carga média,medio,Imagem 300KB,post_imagem_300kb,1,250,5743,0,0.0,14.138198236283154,12.0,26.0,116.89278428712969,locust\resultados\medio\instancia_1\post_imagem_300kb\post_imagem_300kb_250_usuarios_stats.csv
+Carga média,medio,Texto 400KB,post_texto_400kb,1,250,5050,0,0.0,272.03214121286464,210.0,630.0,102.08912290622744,locust\resultados\medio\instancia_1\post_texto_400kb\post_texto_400kb_250_usuarios_stats.csv
+Carga média,medio,Todos,todos,1,250,5571,0,0.0,58.15960758786574,24.0,150.0,113.33012044069586,locust\resultados\medio\instancia_1\todos\todos_250_usuarios_stats.csv
+Carga média,medio,Imagem 1MB,post_imagem_1mb,2,250,5612,0,0.0,21.917785532784197,18.0,53.0,114.1681787422616,locust\resultados\medio\instancia_2\post_imagem_1mb\post_imagem_1mb_250_usuarios_stats.csv
+Carga média,medio,Imagem 300KB,post_imagem_300kb,2,250,5654,0,0.0,13.85442051803296,12.0,25.0,115.04629546879258,locust\resultados\medio\instancia_2\post_imagem_300kb\post_imagem_300kb_250_usuarios_stats.csv
+Carga média,medio,Texto 400KB,post_texto_400kb,2,250,5046,0,0.0,267.65790397918846,200.0,600.0,101.93907970365365,locust\resultados\medio\instancia_2\post_texto_400kb\post_texto_400kb_250_usuarios_stats.csv
+Carga média,medio,Todos,todos,2,250,5554,0,0.0,59.701990145831616,24.0,160.0,112.94085847992643,locust\resultados\medio\instancia_2\todos\todos_250_usuarios_stats.csv
+Carga média,medio,Imagem 1MB,post_imagem_1mb,3,250,5653,0,0.0,23.512378239343366,20.0,53.0,114.9116603399359,locust\resultados\medio\instancia_3\post_imagem_1mb\post_imagem_1mb_250_usuarios_stats.csv
+Carga média,medio,Imagem 300KB,post_imagem_300kb,3,250,5659,0,0.0,14.303666187667869,12.0,26.0,115.14535582027644,locust\resultados\medio\instancia_3\post_imagem_300kb\post_imagem_300kb_250_usuarios_stats.csv
+Carga média,medio,Texto 400KB,post_texto_400kb,3,250,4892,0,0.0,329.70586250878654,250.0,870.0,98.76489659426672,locust\resultados\medio\instancia_3\post_texto_400kb\post_texto_400kb_250_usuarios_stats.csv
+Carga média,medio,Todos,todos,3,250,5498,0,0.0,64.13730434831277,25.0,180.0,111.72865143774766,locust\resultados\medio\instancia_3\todos\todos_250_usuarios_stats.csv
+Carga pesada,pesado,Imagem 1MB,post_imagem_1mb,1,350,7591,0,0.0,23.8938704853124,20.0,61.0,154.44169376412884,locust\resultados\pesado\instancia_1\post_imagem_1mb\post_imagem_1mb_350_usuarios_stats.csv
+Carga pesada,pesado,Imagem 300KB,post_imagem_300kb,1,350,7592,0,0.0,13.615708368939416,11.0,31.0,154.48903637291502,locust\resultados\pesado\instancia_1\post_imagem_300kb\post_imagem_300kb_350_usuarios_stats.csv
+Carga pesada,pesado,Texto 400KB,post_texto_400kb,1,350,5177,0,0.0,1000.534687157042,900.0,2200.0,102.60535110296004,locust\resultados\pesado\instancia_1\post_texto_400kb\post_texto_400kb_350_usuarios_stats.csv
+Carga pesada,pesado,Todos,todos,1,350,7356,0,0.0,86.12129629214341,42.0,290.0,149.3916564150648,locust\resultados\pesado\instancia_1\todos\todos_350_usuarios_stats.csv
+Carga pesada,pesado,Imagem 1MB,post_imagem_1mb,2,350,7557,0,0.0,26.28211620775149,22.0,62.0,153.5985924602981,locust\resultados\pesado\instancia_2\post_imagem_1mb\post_imagem_1mb_350_usuarios_stats.csv
+Carga pesada,pesado,Imagem 300KB,post_imagem_300kb,2,350,7525,0,0.0,13.978738909774885,12.0,33.0,153.10111921028766,locust\resultados\pesado\instancia_2\post_imagem_300kb\post_imagem_300kb_350_usuarios_stats.csv
+Carga pesada,pesado,Texto 400KB,post_texto_400kb,2,350,5145,335,6.511175898931001,947.1779052007744,610.0,3100.0,104.06248273939158,locust\resultados\pesado\instancia_2\post_texto_400kb\post_texto_400kb_350_usuarios_stats.csv
+Carga pesada,pesado,Todos,todos,2,350,7225,0,0.0,121.97834679045305,60.0,470.0,146.42722736479757,locust\resultados\pesado\instancia_2\todos\todos_350_usuarios_stats.csv
+Carga pesada,pesado,Imagem 1MB,post_imagem_1mb,3,350,7570,0,0.0,25.192102143066677,20.0,67.0,153.94006554755748,locust\resultados\pesado\instancia_3\post_imagem_1mb\post_imagem_1mb_350_usuarios_stats.csv
+Carga pesada,pesado,Imagem 300KB,post_imagem_300kb,3,350,7612,0,0.0,14.32128432251694,12.0,33.0,154.9112986263,locust\resultados\pesado\instancia_3\post_imagem_300kb\post_imagem_300kb_350_usuarios_stats.csv
+Carga pesada,pesado,Texto 400KB,post_texto_400kb,3,350,5364,486,9.060402684563758,826.5912455186386,720.0,2200.0,107.9055490417358,locust\resultados\pesado\instancia_3\post_texto_400kb\post_texto_400kb_350_usuarios_stats.csv
+Carga pesada,pesado,Todos,todos,3,350,7346,0,0.0,86.66886165328492,44.0,270.0,148.84644009973906,locust\resultados\pesado\instancia_3\todos\todos_350_usuarios_stats.csv

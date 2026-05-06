@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set TEMPO=2m
+set TEMPO=50s
 set HOST=http://nginx
 
 echo Iniciando bateria de 36 testes...
@@ -31,9 +31,9 @@ docker restart nginx
 echo Aguardando Nginx reiniciar...
 timeout /t 8 /nobreak
 
-call :rodar_carga leve 150 20 %INSTANCIA%
-call :rodar_carga medio 250 20 %INSTANCIA%
-call :rodar_carga pesado 350 20 %INSTANCIA%
+call :rodar_carga leve 150 25 %INSTANCIA%
+call :rodar_carga medio 250 25 %INSTANCIA%
+call :rodar_carga pesado 350 25 %INSTANCIA%
 
 exit /b
 

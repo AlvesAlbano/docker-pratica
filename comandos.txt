@@ -12,4 +12,3 @@ docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless 
 
 docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless -u 150 -r 75 -t 2m --csv=/mnt/data/teste_leve_2instancias_150usuarios
 docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless -u 300 -r 150 -t 2m --csv=/mnt/data/teste_medio_2instancias_300usuarios
-docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless -u 1500 -r 75 -t 2m --csv=resultados/leve/fds
