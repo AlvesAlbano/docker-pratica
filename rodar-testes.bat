@@ -1,7 +1,7 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set TEMPO=50s
+set TEMPO=1m
 set HOST=http://nginx
 
 echo Iniciando bateria de 36 testes...

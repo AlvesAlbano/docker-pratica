@@ -118,7 +118,6 @@ df_geral = df_geral[[
     "Teste", "Usuarios", "Instancias", "Requisicoes", "Falhas",
     "Erro", "TempoMedio", "Mediana", "P95", "RPS"
 ]]
-
 df_geral.to_csv(pasta_saida / "resumo_geral_por_carga_instancia.csv", index=False, encoding="utf-8-sig")
 
 
@@ -147,7 +146,13 @@ def grafico_barra_agrupado(base, indice, colunas, valores, titulo, eixo_x, eixo_
     salvar_grafico(nome_arquivo)
 
 
-def gerar_grafico_por_usuarios(metrica, titulo, eixo_y, nome_arquivo):
+# ============================================================
+# GRÁFICOS GERAIS ANTIGOS
+# Estes mantêm a visão geral agregando todos os cenários:
+# Imagem 1MB + Imagem 300KB + Texto 400KB + Todos
+# ============================================================
+
+def gerar_grafico_geral_por_usuarios(metrica, titulo, eixo_y, nome_arquivo):
     base = (
         df.groupby(["Instancias", "Usuarios"], observed=True, as_index=False)[metrica]
           .mean()
@@ -166,7 +171,7 @@ def gerar_grafico_por_usuarios(metrica, titulo, eixo_y, nome_arquivo):
     )
 
 
-def gerar_grafico_por_instancias(metrica, titulo, eixo_y, nome_arquivo):
+def gerar_grafico_geral_por_instancias(metrica, titulo, eixo_y, nome_arquivo):
     base = (
         df.groupby(["Teste", "Instancias"], observed=True, as_index=False)[metrica]
           .mean()
@@ -185,106 +190,128 @@ def gerar_grafico_por_instancias(metrica, titulo, eixo_y, nome_arquivo):
     )
 
 
-def gerar_grafico_por_posts(metrica, titulo, eixo_y, nome_arquivo):
+gerar_grafico_geral_por_usuarios(
+    "TempoMedio",
+    "Tempo médio geral por número de usuários",
+    "Tempo médio (ms)",
+    "01_geral_tempo_medio_por_usuarios.png"
+)
+
+gerar_grafico_geral_por_usuarios(
+    "P95",
+    "P95 geral por número de usuários",
+    "P95 (ms)",
+    "02_geral_p95_por_usuarios.png"
+)
+
+gerar_grafico_geral_por_usuarios(
+    "Erro",
+    "Taxa de falha geral por número de usuários",
+    "Taxa de falha (%)",
+    "03_geral_taxa_falha_por_usuarios.png"
+)
+
+gerar_grafico_geral_por_usuarios(
+    "RPS",
+    "Requisições por segundo geral por número de usuários",
+    "RPS",
+    "04_geral_rps_por_usuarios.png"
+)
+
+gerar_grafico_geral_por_instancias(
+    "TempoMedio",
+    "Tempo médio geral por quantidade de instâncias",
+    "Tempo médio (ms)",
+    "05_geral_tempo_medio_por_instancias.png"
+)
+
+gerar_grafico_geral_por_instancias(
+    "P95",
+    "P95 geral por quantidade de instâncias",
+    "P95 (ms)",
+    "06_geral_p95_por_instancias.png"
+)
+
+gerar_grafico_geral_por_instancias(
+    "Erro",
+    "Taxa de falha geral por quantidade de instâncias",
+    "Taxa de falha (%)",
+    "07_geral_taxa_falha_por_instancias.png"
+)
+
+gerar_grafico_geral_por_instancias(
+    "RPS",
+    "Requisições por segundo geral por quantidade de instâncias",
+    "RPS",
+    "08_geral_rps_por_instancias.png"
+)
+
+
+# ============================================================
+# NOVOS GRÁFICOS POR TIPO DE CONTEÚDO
+# 4 tipos de conteúdo x 3 métricas = 12 gráficos
+# Cada gráfico usa somente um tipo de conteúdo por vez.
+# ============================================================
+
+def grafico_barra_por_conteudo(conteudo, metrica, titulo, eixo_y, nome_arquivo):
+    base = df[df["Conteudo"] == conteudo].copy()
+
+    if base.empty:
+        print(f"Aviso: não foram encontrados dados para {conteudo}.")
+        return
+
     base = (
-        df.groupby(["Teste", "Conteudo"], observed=True, as_index=False)[metrica]
-          .mean()
-          .sort_values(["Teste", "Conteudo"])
+        base.groupby(["Usuarios", "Instancias"], observed=True, as_index=False)[metrica]
+            .mean()
+            .sort_values(["Usuarios", "Instancias"])
     )
 
-    grafico_barra_agrupado(
-        base=base,
-        indice="Conteudo",
-        colunas="Teste",
-        valores=metrica,
-        titulo=titulo,
-        eixo_x="Post / cenário acessado",
-        eixo_y=eixo_y,
-        nome_arquivo=nome_arquivo,
-        rotacao=0
+    tabela = base.pivot(index="Usuarios", columns="Instancias", values=metrica)
+
+    ax = tabela.plot(kind="bar", figsize=(10, 5))
+    ax.set_title(titulo)
+    ax.set_xlabel("Número de usuários")
+    ax.set_ylabel(eixo_y)
+    ax.grid(True, axis="y")
+    plt.xticks(rotation=0)
+
+    salvar_grafico(nome_arquivo)
+
+
+def gerar_graficos_para_conteudo(conteudo, slug):
+    grafico_barra_por_conteudo(
+        conteudo=conteudo,
+        metrica="TempoMedio",
+        titulo=f"Tempo médio - {conteudo}",
+        eixo_y="Tempo médio (ms)",
+        nome_arquivo=f"{slug}_tempo_medio.png"
+    )
+
+    grafico_barra_por_conteudo(
+        conteudo=conteudo,
+        metrica="P95",
+        titulo=f"P95 - {conteudo}",
+        eixo_y="P95 (ms)",
+        nome_arquivo=f"{slug}_p95.png"
+    )
+
+    grafico_barra_por_conteudo(
+        conteudo=conteudo,
+        metrica="Erro",
+        titulo=f"Taxa de falha - {conteudo}",
+        eixo_y="Taxa de falha (%)",
+        nome_arquivo=f"{slug}_taxa_falha.png"
     )
 
 
-gerar_grafico_por_usuarios(
-    "TempoMedio",
-    "Tempo médio por número de usuários",
-    "Tempo médio (ms)",
-    "01_tempo_medio_por_usuarios.png"
-)
+gerar_graficos_para_conteudo("Imagem 1MB", "09_imagem_1mb")
+gerar_graficos_para_conteudo("Imagem 300KB", "10_imagem_300kb")
+gerar_graficos_para_conteudo("Texto 400KB", "11_texto_400kb")
+gerar_graficos_para_conteudo("Todos", "12_todos")
 
-gerar_grafico_por_usuarios(
-    "P95",
-    "P95 por número de usuários",
-    "P95 (ms)",
-    "02_p95_por_usuarios.png"
-)
 
-gerar_grafico_por_usuarios(
-    "Erro",
-    "Taxa de falha por número de usuários",
-    "Taxa de falha (%)",
-    "03_taxa_falha_por_usuarios.png"
-)
-
-gerar_grafico_por_usuarios(
-    "RPS",
-    "Requisições por segundo por número de usuários",
-    "RPS",
-    "04_rps_por_usuarios.png"
-)
-
-gerar_grafico_por_instancias(
-    "TempoMedio",
-    "Tempo médio por quantidade de instâncias",
-    "Tempo médio (ms)",
-    "05_tempo_medio_por_instancias.png"
-)
-
-gerar_grafico_por_instancias(
-    "P95",
-    "P95 por quantidade de instâncias",
-    "P95 (ms)",
-    "06_p95_por_instancias.png"
-)
-
-gerar_grafico_por_instancias(
-    "Erro",
-    "Taxa de falha por quantidade de instâncias",
-    "Taxa de falha (%)",
-    "07_taxa_falha_por_instancias.png"
-)
-
-gerar_grafico_por_posts(
-    "TempoMedio",
-    "Tempo médio por post/cenário",
-    "Tempo médio (ms)",
-    "08_tempo_medio_por_posts.png"
-)
-
-gerar_grafico_por_posts(
-    "Erro",
-    "Taxa de falha por post/cenário",
-    "Taxa de falha (%)",
-    "09_taxa_falha_por_posts.png"
-)
-
-gerar_grafico_por_posts(
-    "P95",
-    "P95 por post/cenário",
-    "P95 (ms)",
-    "10_p95_por_posts.png"
-)
-
-print("Gráficos de barras gerados com sucesso na pasta 'graficos'.")
+print("Gráficos gerados com sucesso na pasta 'graficos'.")
 print(f"Total de cenários lidos: {len(df)}")
-print("Arquivos gerados:")
-print("01_tempo_medio_por_usuarios.png")
-print("02_p95_por_usuarios.png")
-print("03_taxa_falha_por_usuarios.png")
-print("04_rps_por_usuarios.png")
-print("05_tempo_medio_por_instancias.png")
-print("06_p95_por_instancias.png")
-print("07_taxa_falha_por_instancias.png")
-print("08_tempo_medio_por_posts.png")
-print("09_taxa_falha_por_posts.png")
-print("10_p95_por_posts.png")
+print("Gráficos gerais gerados: 8")
+print("Gráficos por conteúdo gerados: 12")
+print("Total de gráficos gerados: 20")

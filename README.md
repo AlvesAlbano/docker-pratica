@@ -3,107 +3,169 @@ Autores: Matheus Norões - 2224600 \
 Autores: Lucas Falcão - 2315036 \
 Autores: Samir Alves - 2315046 \
 
-# Resumo
+# Testes de Carga com Múltiplas Instâncias do WordPress Utilizando o Locust
 
-Este teste de carga analisa a disponibilidade de um serviço **WordPress** em múltiplas instancias. Foi utilizada a framework de testes de carga **Locust**, O balanceador de carga **nginx** e contêineres feitos em **Docker** foram utilizados para: Hospedagem do serviço, framework e balanceador de carga, armazenamento das postagens do blog em um banco de dados **MySQL**
+## Resumo
 
-# Metodologia
+Este trabalho realiza testes de carga para avaliar a disponibilidade e o desempenho de um serviço **WordPress** replicado em múltiplas instâncias. A ferramenta de geração de carga utilizada foi o **Locust**, com balanceamento de carga feito pelo **Nginx** e toda a infraestrutura containerizada via **Docker**. O banco de dados das postagens é gerenciado pelo **MySQL**.
 
-O teste carga realizado no Locust foram realizados em 3 postagens do blog.  A primeira postagem contia uma imagem de 1MB, a segunda contia uma imagem de 300KB e a terceira postagem contia um texto de 400KB, os testes foram separados em três categorias: Leve, Medio e Pesado. Cade teste foi realizado em um tempo máximo de 2 minutos com um numero crescente de usuários gerados e instancias do serviço.
+## Infraestrutura
 
-# Resultados e Discussão
+- **WordPress**: serviço web sob teste, executado em 1, 2 ou 3 instâncias
+- **Nginx**: balanceador de carga entre as instâncias do WordPress
+- **MySQL**: banco de dados das postagens
+- **Locust**: gerador de carga, executado como container Docker
+- **Docker Compose**: orquestração de todos os serviços
 
-O resultados obtidos, por meio do Locust, mostraram o comportamento da disponibilidade do serviço considerando diferentes instancias disponíveis e usuários entrando por segundo.
+## Metodologia
 
-| Teste | Instâncias WordPress | Usuários simultâneos | Conteúdos acessados                      |
-| ----- | -------------------: | -------------------: | ---------------------------------------- |
-| T1    |                    1 |                  150 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T2    |                    1 |                  300 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T3    |                    1 |                 1500 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T4    |                    2 |                  150 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T5    |                    2 |                  300 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T6    |                    2 |                 1500 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T7    |                    3 |                  150 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T8    |                    3 |                  300 | imagem 1 MB, imagem 300 KB, texto 400 KB |
-| T9    |                    3 |                 1500 | imagem 1 MB, imagem 300 KB, texto 400 KB |
+Os testes simulam usuários acessando postagens de um blog WordPress com três tipos de conteúdo:
 
-## 1 Instancia
+| Cenário | Conteúdo |
+|---|---|
+| Post imagem 1MB | Postagem contendo uma imagem de aproximadamente 1 MB |
+| Post imagem 300KB | Postagem contendo uma imagem de aproximadamente 300 KB |
+| Post texto 400KB | Postagem contendo um texto de aproximadamente 400 KB |
+| Todos | Os três cenários executados simultaneamente |
 
-![imagem](data/imagens/resultados.png)
+Cada cenário foi executado em três níveis de carga e três configurações de instâncias, totalizando **36 testes**:
 
-| Teste      | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ---------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga leve | Imagem 1MB   |          1 |      150 |        2933 |      0 |     0,00 |              109 |           83 |      270 | 24,50 |
-| Carga leve | Imagem 300KB |          1 |      150 |        2803 |      0 |     0,00 |              106 |           83 |      260 | 23,42 |
-| Carga leve | Texto 400KB  |          1 |      150 |        2864 |      0 |     0,00 |              112 |           90 |      260 | 23,93 |
+| Nível | Usuários simultâneos | Spawn rate |
+|---|---|---|
+| Leve | 150 | 25/s |
+| Médio | 250 | 25/s |
+| Pesado | 350 | 25/s |
 
-| Teste       | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ----------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga média | Imagem 1MB   |          1 |      300 |        5376 |      0 |     0,00 |              280 |          210 |      680 | 44,84 |
-| Carga média | Imagem 300KB |          1 |      300 |        5195 |      0 |     0,00 |              273 |          190 |      670 | 43,33 |
-| Carga média | Texto 400KB  |          1 |      300 |        5200 |      0 |     0,00 |              289 |          220 |      700 | 43,38 |
+| Instâncias | Configuração |
+|---|---|
+| 1 | Nginx encaminha todas as requisições para 1 container WordPress |
+| 2 | Nginx balanceia entre 2 containers WordPress |
+| 3 | Nginx balanceia entre 3 containers WordPress |
 
-| Teste        | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |    RPS |
-| ------------ | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | -----: |
-| Carga pesada | Imagem 1MB   |          1 |     1500 |       14820 |  12411 |    83,74 |             1605 |          210 |     9700 | 123,25 |
-| Carga pesada | Imagem 300KB |          1 |     1500 |       14824 |  12397 |    83,63 |             1583 |          240 |     9600 | 123,28 |
-| Carga pesada | Texto 400KB  |          1 |     1500 |       14823 |  12399 |    83,65 |             1631 |          240 |     9700 | 123,27 |
+Cada teste teve duração de **1 minuto**. Os resultados foram coletados pelo Locust via CSV e posteriormente processados e visualizados em gráficos Python.
 
-No teste pesado com 1 instância, o Locust indicou uso elevado de CPU e encerrou os testes precocemente. Mesmo assim, os dados foram úteis pois mostram que houve saturação do serviço web. A taxa de erro ficou em 83,67%, com falhas principalmente por RemoteDisconnected, erro HTTP 500 e ConnectionResetError. Isso indica que uma única instância do WordPress não conseguiu sustentar a carga de 1500 usuários no ambiente local.
-Na carga pesada, a diferença mais importante é a taxa de erro: com 1 instância, o erro foi 83,67%; com 3 instâncias, caiu para 53,23%. Ou seja, mesmo que o cenário pesado tenha causado instabilidade nos dois casos, aumentar o número de instâncias reduziu bastante a proporção de falhas.
+## Resultados e Discussão
 
-## 2 Instancias
+### Tabela Geral dos Testes
 
-| Teste      | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ---------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga leve | Imagem 1MB   |          2 |      150 |        2793 |      0 |     0,00 |              131 |          110 |      320 | 23,31 |
-| Carga leve | Imagem 300KB |          2 |      150 |        2896 |      0 |     0,00 |              130 |          100 |      310 | 24,17 |
-| Carga leve | Texto 400KB  |          2 |      150 |        2771 |      0 |     0,00 |              141 |          110 |      330 | 23,13 |
+A tabela abaixo consolida os resultados agregados de todos os cenários (imagem 1MB, imagem 300KB, texto 400KB e todos simultâneos) para cada combinação de carga e número de instâncias.
 
-| Teste       | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ----------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga média | Imagem 1MB   |          2 |      300 |        4786 |      0 |     0,00 |              473 |          400 |     1000 | 40,06 |
-| Carga média | Imagem 300KB |          2 |      300 |        4854 |      0 |     0,00 |              469 |          400 |     1000 | 40,62 |
-| Carga média | Texto 400KB  |          2 |      300 |        4841 |      0 |     0,00 |              499 |          430 |     1000 | 40,52 |
+| Carga | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) | RPS |
+|---|---|---|---|---|---|---|---|---|---|
+| Leve | 1 | 150 | 13.862 | 0 | 0,00 | 60 | 41 | 131 | 70,47 |
+| Leve | 2 | 150 | 13.879 | 0 | 0,00 | 56 | 38 | 130 | 70,59 |
+| Leve | 3 | 150 | 13.925 | 0 | 0,00 | 60 | 41 | 148 | 70,79 |
+| Médio | 1 | 250 | 22.048 | 0 | 0,00 | 91 | 66 | 213 | 111,98 |
+| Médio | 2 | 250 | 21.866 | 0 | 0,00 | 90 | 63 | 209 | 111,02 |
+| Médio | 3 | 250 | 21.702 | 0 | 0,00 | 107 | 76 | 282 | 110,14 |
+| Pesado | 1 | 350 | 27.716 | 0 | 0,00 | 281 | 243 | 645 | 140,23 |
+| Pesado | 2 | 350 | 27.452 | 335 | 1,22 | 277 | 176 | 916 | 139,30 |
+| Pesado | 3 | 350 | 27.892 | 486 | 1,74 | 238 | 199 | 642 | 141,40 |
 
-| Teste        | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ------------ | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga pesada | Imagem 1MB   |          2 |     1500 |        9100 |   4721 |    51,88 |             3609 |         1600 |    18000 | 74,14 |
-| Carga pesada | Imagem 300KB |          2 |     1500 |        9203 |   4708 |    51,16 |             3678 |         1600 |    18000 | 74,98 |
-| Carga pesada | Texto 400KB  |          2 |     1500 |        9261 |   4776 |    51,57 |             3801 |         1700 |    19000 | 75,45 |
+### Taxa de Erros
 
-Nos testes com 2 instâncias, as cargas leve e média foram concluídas sem falhas, mantendo 0,00% de erro. Já no teste pesado, com 1500 usuários, o sistema apresentou 51,53% de erro, com falhas do tipo erro HTTP 500, conexões encerradas sem resposta e reset de conexão. Isso indica que, nesse nível de carga, a arquitetura local entrou em saturação, mesmo utilizando duas instâncias do WordPress.
+Nas cargas **leve e média**, todos os cenários — independente do número de instâncias — apresentaram **0% de falhas**, indicando que a arquitetura suportou bem esses níveis de carga. Na carga **pesada**, os erros se mantiveram abaixo de 2% para 2 e 3 instâncias, dentro do limite aceitável de 10%. Com 1 instância na carga pesada, surpreendentemente não houve falhas no agregado, porém o tempo médio de resposta subiu para 281ms com P95 chegando a 645ms.
 
-## 3 Instancias
+### Efeito do Número de Instâncias
 
-| Teste      | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ---------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga leve | Imagem 1MB   |          3 |      150 |        2722 |      0 |     0,00 |              128 |           97 |      320 | 22,73 |
-| Carga leve | Imagem 300KB |          3 |      150 |        2872 |      0 |     0,00 |              133 |           99 |      310 | 23,99 |
-| Carga leve | Texto 400KB  |          3 |      150 |        2807 |      0 |     0,00 |              135 |          110 |      320 | 23,44 |
+O resultado mais interessante dos testes foi que **aumentar o número de instâncias não melhorou o desempenho** de forma proporcional — em alguns casos chegou a piorá-lo levemente. Esse comportamento, aparentemente contraditório, tem uma explicação direta no contexto desta infraestrutura: todos os containers (WordPress 1, 2 e 3, Nginx, MySQL e Locust) estão executando **na mesma máquina física**, competindo pelos mesmos recursos de CPU, memória e I/O. Ao subir de 1 para 3 instâncias do WordPress, o overhead de gerenciar múltiplos containers passou a consumir recursos que antes estavam disponíveis para servir requisições. O MySQL, compartilhado por todas as instâncias, também passa a ser um gargalo maior à medida que mais instâncias do WordPress fazem conexões simultâneas a ele.
 
-| Teste       | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ----------- | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga média | Imagem 1MB   |          3 |      300 |        5409 |      0 |     0,00 |              240 |          160 |      600 | 45,28 |
-| Carga média | Imagem 300KB |          3 |      300 |        5304 |      0 |     0,00 |              234 |          160 |      570 | 44,40 |
-| Carga média | Texto 400KB  |          3 |      300 |        5312 |      0 |     0,00 |              248 |          170 |      600 | 44,47 |
+Em uma infraestrutura real com servidores dedicados por instância, o comportamento esperado de melhoria com mais instâncias seria observado.
 
-| Teste        | Conteúdo     | Instâncias | Usuários | Requisições | Falhas | Erro (%) | Tempo médio (ms) | Mediana (ms) | P95 (ms) |   RPS |
-| ------------ | ------------ | ---------: | -------: | ----------: | -----: | -------: | ---------------: | -----------: | -------: | ----: |
-| Carga pesada | Imagem 1MB   |          3 |     1500 |       11607 |   6241 |    53,77 |             2489 |         1100 |    11000 | 95,62 |
-| Carga pesada | Imagem 300KB |          3 |     1500 |       11614 |   6133 |    52,81 |             2487 |         1100 |    11000 | 95,68 |
-| Carga pesada | Texto 400KB  |          3 |     1500 |       11877 |   6309 |    53,12 |             2590 |         1200 |    12000 | 97,84 |
+### Gráficos por Métrica e Número de Usuários
 
-No teste de carga leve, foram utilizadas 3 instâncias do WordPress, com duração de 2 minutos, máximo de 150 usuários simultâneos e taxa de criação de 75 usuários por segundo. O teste acessou três tipos de conteúdo: um post com imagem de aproximadamente 1 MB, um post com imagem de aproximadamente 300 KB e um post com texto de aproximadamente 400 KB.
-Ao final da execução, foram realizadas 8401 requisições, sem ocorrência de falhas, resultando em uma taxa de erro de 0,00%. O tempo médio de resposta agregado foi de 132 ms, com mediana de 100 ms e tempo máximo de 1118 ms. A taxa média de requisições foi de 70,16 requisições por segundo.
-Os resultados indicam que, para a carga leve aplicada, a arquitetura com Nginx balanceando três instâncias do WordPress conseguiu atender às requisições de forma estável, sem falhas e com baixo tempo médio de resposta.
+Os gráficos a seguir mostram o comportamento das principais métricas conforme a carga aumenta (150 → 250 → 350 usuários), separados por número de instâncias.
 
-No teste de carga média, foram utilizadas 3 instâncias do WordPress, com duração de 2 minutos, máximo de 300 usuários simultâneos e taxa de criação de 150 usuários por segundo. O teste realizou 16025 requisições no total, sem ocorrência de falhas, resultando em 0,00% de erro.
-O tempo médio de resposta agregado foi de 241 ms, com mediana de 170 ms, P95 de 590 ms e P99 de 860 ms. A taxa média de requisições foi de 134,15 requisições por segundo. Em comparação com o teste leve, houve aumento no tempo médio de resposta, mas a aplicação continuou estável, sem falhas registradas.
+**Tempo médio de resposta por nível de carga:**
 
-No teste pesado, com 1500 usuários e taxa de criação de 75 usuários por segundo, a aplicação apresentou forte degradação. Foram realizadas 35098 requisições, porém 18683 falharam, resultando em 53,23% de erro. O tempo médio agregado subiu para 2523 ms e o P95 chegou a 11000 ms, indicando que parte significativa das requisições teve alto tempo de resposta.
-Os principais erros foram 500 Internal Server Error, conexões encerradas sem resposta e reset de conexão. Isso indica que a carga aplicada ultrapassou a capacidade da arquitetura local, mesmo com 3 instâncias do WordPress. Portanto, esse cenário pode ser usado para demonstrar o ponto em que o sistema deixa de se manter estável.
+![Tempo médio por usuários](graficos/01_geral_tempo_medio_por_usuarios.png)
 
-# Conclusão
+O tempo médio de resposta cresce de forma consistente com o aumento de usuários em todas as configurações de instâncias. Entre a carga leve (150 usuários) e a carga pesada (350 usuários), o tempo médio agregado quase quadruplicou — de aproximadamente 60ms para 260–280ms. As três curvas de instâncias seguem trajetórias muito próximas, reforçando que neste ambiente o número de instâncias não gerou ganhos expressivos de latência.
 
-Neste teste de carga foi analisado a disponibilidade de um serviço replicado em múltiplas instancias usando o nginx como balanceador de carga. A partir destes testes foi possível observar como o serviço se comporta com uma quantidade crescente de usuários o acessando simultaneamente ---------------
+**P95 de tempo de resposta por nível de carga:**
+
+![P95 por usuários](graficos/02_geral_p95_por_usuarios.png)
+
+O P95 amplia o que o tempo médio já indica: enquanto a maioria das requisições é atendida com baixa latência, os 5% mais lentos sofrem um crescimento mais acentuado conforme a carga aumenta. Na carga pesada, o P95 chegou a 916ms para 2 instâncias — mais de 7 vezes o valor registrado na carga leve (130ms). Esse comportamento é típico de saturação progressiva, onde as requisições que chegam quando o servidor está ocupado ficam enfileiradas por mais tempo.
+
+**Taxa de falha por nível de carga:**
+
+![Taxa de falha por usuários](graficos/03_geral_taxa_falha_por_usuarios.png)
+
+Nas cargas leve e média a taxa de falha permaneceu em 0% para todas as instâncias. Na carga pesada, apenas os testes de texto 400KB com 2 e 3 instâncias registraram falhas, puxando o agregado para 1,22% e 1,74% respectivamente. Com 1 instância, o agregado manteve 0% mesmo na carga pesada — resultado que parece positivo, mas precisa ser lido em conjunto com o P95 elevado: o servidor não rejeitou requisições, mas respondeu com latências altas para parcela significativa delas.
+
+**Requisições por segundo por nível de carga:**
+
+![RPS por usuários](graficos/04_geral_rps_por_usuarios.png)
+
+O RPS cresceu proporcionalmente com o número de usuários, saindo de ~70 req/s na carga leve para ~140 req/s na carga pesada. Esse aumento linear indica que o servidor absorveu a carga sem travamentos completos — ou seja, mesmo sobrecarregado, continuou processando requisições, ainda que com latência maior. As três configurações de instâncias produziram RPS praticamente idêntico em todos os níveis de carga.
+
+### Gráficos por Métrica e Número de Instâncias
+
+Os gráficos abaixo comparam o desempenho variando o número de instâncias (1 → 2 → 3), evidenciando o comportamento descrito anteriormente.
+
+**Tempo médio de resposta por instâncias:**
+
+![Tempo médio por instâncias](graficos/05_geral_tempo_medio_por_instancias.png)
+
+Ao variar o número de instâncias com a carga fixada, o tempo médio não apresentou melhora consistente. Na carga média, 3 instâncias chegaram a ter tempo médio ligeiramente superior (107ms) ao de 1 instância (91ms), sugerindo overhead de coordenação entre containers. Na carga pesada, 3 instâncias tiveram o menor tempo médio (238ms), mas a diferença para 1 instância (281ms) é pequena considerando a margem de variação dos testes.
+
+**P95 por instâncias:**
+
+![P95 por instâncias](graficos/06_geral_p95_por_instancias.png)
+
+O P95 por instâncias revela o comportamento mais instável: com 2 instâncias na carga pesada, o P95 agregado chegou a 916ms, valor bem acima das 645ms de 1 instância e 642ms de 3 instâncias. Esse pico está diretamente relacionado ao cenário de texto 400KB com 2 instâncias, que registrou P95 de 3100ms — evidenciando que a configuração de 2 instâncias foi a que mais sofreu com esse tipo de conteúdo específico.
+
+**Taxa de falha por instâncias:**
+
+![Taxa de falha por instâncias](graficos/07_geral_taxa_falha_por_instancias.png)
+
+A taxa de falha por instâncias deixa claro que 1 instância foi a mais estável globalmente, com 0% de erro em todos os níveis de carga. As configurações de 2 e 3 instâncias introduziram falhas na carga pesada (1,22% e 1,74%), ambas originadas exclusivamente no cenário de texto 400KB. Isso indica que o aumento de instâncias, neste ambiente compartilhado, não trouxe maior resiliência — pelo contrário, a competição por recursos do MySQL e do sistema operacional gerou condições que levaram a falhas pontuais.
+
+**RPS por instâncias:**
+
+![RPS por instâncias](graficos/08_geral_rps_por_instancias.png)
+
+O RPS se manteve praticamente estável entre as configurações de instâncias em todos os níveis de carga, com variações inferiores a 2%. Isso confirma que a capacidade de throughput do sistema é limitada por um gargalo compartilhado — provavelmente o MySQL ou os recursos do host — e não pelo número de processos WordPress em execução.
+
+### Gráficos por Tipo de Conteúdo
+
+Os gráficos a seguir detalham cada cenário de conteúdo individualmente, permitindo comparar como o tipo de postagem influencia os resultados.
+
+#### Post com Imagem 1MB
+
+![Tempo médio - Imagem 1MB](graficos/09_imagem_1mb_tempo_medio.png)
+![P95 - Imagem 1MB](graficos/09_imagem_1mb_p95.png)
+![Taxa de falha - Imagem 1MB](graficos/09_imagem_1mb_taxa_falha.png)
+
+O post de imagem 1MB foi o cenário mais estável de todos, com **0% de falhas** em todas as combinações de carga e instâncias. O tempo médio permaneceu em torno de 22–26ms mesmo na carga pesada com 350 usuários, e o P95 ficou abaixo de 70ms. Esse desempenho notavelmente baixo se deve ao fato de que arquivos de imagem são servidos de forma estática pelo WordPress, sem renderização PHP nem consultas ao banco de dados relevantes — o servidor basicamente envia bytes de disco diretamente ao cliente. A taxa de falha permaneceu em 0% em todos os testes, sem nenhuma correlação com o P95, que também se manteve baixo e estável.
+
+#### Post com Imagem 300KB
+
+![Tempo médio - Imagem 300KB](graficos/10_imagem_300kb_tempo_medio.png)
+![P95 - Imagem 300KB](graficos/10_imagem_300kb_p95.png)
+![Taxa de falha - Imagem 300KB](graficos/10_imagem_300kb_taxa_falha.png)
+
+O post de imagem 300KB apresentou comportamento praticamente idêntico ao de 1MB, com tempo médio entre 13–15ms e P95 abaixo de 40ms em todos os cenários. A taxa de falha foi 0% em todos os testes. O que chama atenção é que, apesar de a imagem de 300KB ser significativamente menor que a de 1MB, os tempos de resposta foram levemente menores — mas a diferença é marginal, o que reforça que o tamanho do arquivo de imagem não é o fator dominante de latência nesse ambiente. Assim como no cenário anterior, P95 baixo e 0% de falhas andam juntos, sem tensão entre as métricas.
+
+#### Post com Texto 400KB
+
+![Tempo médio - Texto 400KB](graficos/11_texto_400kb_tempo_medio.png)
+![P95 - Texto 400KB](graficos/11_texto_400kb_p95.png)
+![Taxa de falha - Texto 400KB](graficos/11_texto_400kb_taxa_falha.png)
+
+O cenário de texto 400KB foi o mais exigente e o único a registrar falhas. Na carga pesada com 1 instância, o tempo médio chegou a 1000ms e o P95 a 2200ms — mais de 30 vezes o P95 dos cenários de imagem. Com 2 instâncias na carga pesada, o P95 disparou para 3100ms e a taxa de falha atingiu 6,5%; com 3 instâncias, o P95 foi de 2200ms e a falha chegou a 9,0%. Aqui fica clara a relação entre P95 elevado e taxa de falha: quando o P95 ultrapassa a casa dos 2000ms, o servidor começa a rejeitar ou encerrar conexões, gerando falhas. O texto 400KB exige renderização PHP completa e consulta ao banco de dados para cada requisição, tornando-o muito mais sensível à sobrecarga do que os cenários de imagem. Também é o único cenário onde aumentar instâncias piorou os resultados — provavelmente porque o MySQL passou a ser pressionado por mais conexões simultâneas.
+
+#### Todos os Cenários Simultâneos
+
+![Tempo médio - Todos](graficos/12_todos_tempo_medio.png)
+![P95 - Todos](graficos/12_todos_p95.png)
+![Taxa de falha - Todos](graficos/12_todos_taxa_falha.png)
+
+O cenário "todos" simula um uso mais realista do blog, com usuários acessando os três tipos de postagem de forma aleatória e com igual probabilidade. Os resultados mostraram **0% de falhas** em todos os testes, e o tempo médio ficou entre 54–122ms dependendo da carga. O P95 ficou bem abaixo dos valores críticos do cenário de texto isolado — na carga pesada, chegou a 290ms com 1 instância e 470ms com 2 instâncias, valores confortáveis. Isso acontece porque, no mix de tarefas, as requisições de imagem (que são rápidas) diluem o impacto das requisições de texto, derrubando as métricas agregadas. A ausência de falhas mesmo na carga pesada reforça que o P95 abaixo de ~500ms funcionou como um indicador de estabilidade: enquanto o percentil 95 permaneceu nessa faixa, o servidor não chegou ao ponto de rejeitar conexões.
+
+## Conclusão
+
+Os testes de carga demonstraram que a arquitetura WordPress + Nginx + MySQL containerizada conseguiu suportar bem os cenários de carga leve e média (150 e 250 usuários), com 0% de falhas em todos os casos. Na carga pesada (350 usuários), os erros se mantiveram abaixo de 10% — limite considerado aceitável — exceto no cenário de texto 400KB com 3 instâncias, que chegou próximo desse limiar (9%).
+
+O principal achado foi que adicionar instâncias do WordPress **não trouxe ganhos proporcionais** neste ambiente, pois todos os serviços compartilham os recursos da mesma máquina. Em produção, com servidores dedicados, espera-se que o escalonamento horizontal produza os benefícios esperados de redução de latência e maior tolerância à carga.
