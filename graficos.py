@@ -62,10 +62,6 @@ for arquivo in sorted(pasta_resultados.rglob("*_stats.csv")):
     carga_raw  = partes[0]
     cenario_raw = partes[1]
 
-    # Pula pastas do trabalho 3 (instancia_X)
-    if cenario_raw.startswith("instancia_"):
-        continue
-
     carga_label   = rotulo_carga.get(carga_raw, carga_raw)
     cenario_label = rotulo_cenario.get(cenario_raw, cenario_raw)
 

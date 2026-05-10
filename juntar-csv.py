@@ -2,7 +2,7 @@ import re
 import pandas as pd
 from pathlib import Path
 
-pasta_raiz = Path("locust/resultados")
+pasta_raiz = Path("./locust/resultados")
 
 dfs = []
 
@@ -11,10 +11,6 @@ for arquivo in sorted(pasta_raiz.rglob("*_stats.csv")):
         continue
 
     partes = arquivo.parts
-
-    # Pula pastas do trabalho 3 (instancia_X)
-    if any(p.startswith("instancia_") for p in partes):
-        continue
 
     df = pd.read_csv(arquivo)
     df = df[df["Name"] != "Aggregated"]
@@ -34,7 +30,7 @@ for arquivo in sorted(pasta_raiz.rglob("*_stats.csv")):
     df["qtd_usuarios"] = qtd_usuarios
     df["tem_redis"]    = tem_redis
     df["linguagem_api"] = linguagem_api
-    df["cenario"]      = cenario_raw
+    # df["cenario"]      = cenario_raw
 
     print(arquivo)
     dfs.append(df)
