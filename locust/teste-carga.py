@@ -1,29 +1,44 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, SequentialTaskSet, task, events
+from urllib.parse import quote
+
+@events.init_command_line_parser.add_listener
+def _(parser):
+    parser.add_argument(
+        "--request-name",
+        type=str,
+        env_var="REQUEST_NAME",
+        default="/api/[link]",
+        help="Nome exibido no relatório do Locust"
+    )
+
+class ExtracaoSequencial(SequentialTaskSet):
+
+    links = [
+        "https://unifor.br/web/graduacao/medicina",
+        "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/c/covid-19",
+        "https://www.gov.br/pt-br",
+        "https://g1.globo.com/sp/campinas-regiao/noticia/2026/05/09/produtos-ype-nao-recomendados-pela-anvisa-10-pontos-para-entender-o-caso.ghtml",
+        "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/h/hantavirose",
+        "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/a/aids-hiv",
+        "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/a/autismo",
+        "https://www.gov.br/saude/pt-br/assuntos/saude-com-ciencia",
+        "https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/sindrome-de-burnout",
+        "https://g1.globo.com/saude/noticia/2026/05/09/brasil-casos-de-hantavirus-no-ano-sem-elo-com-genotipo-ligado-ao-surto-em-cruzeiro-entenda-contexto.ghtml"
+    ]
 
 
-# url_postagem_imagem_1mb = "/?p=7"
-# url_postagem_imagem_300kb = "/?p=9" 
-# url_postagem_texto_400kb = "/?p=5"
- 
-url_postagem_imagem_1mb = "/?p=6"
-url_postagem_imagem_300kb = "/?p=9"
-url_postagem_texto_400kb = "/?p=12"
+    @task
+    def executar(self):
+        request_name = self.user.environment.parsed_options.request_name
+        
+        for link in self.links:
 
-class SiteWordPress(HttpUser):
-    wait_time = between(1, 3)
+            # encoded_link = quote(link, safe='')
 
-    headers = {
-        "Host": "localhost:8080"
-    }
-    
-    @task(1)
-    def post_texto_400kb(self):
-        self.client.get(url_postagem_texto_400kb, name="Post texto 400KB", headers=self.headers)
+            self.client.get(
+                f"/api/{link}",
+                name=request_name
+            )
 
-    @task(1)
-    def post_imagem_1mb(self):
-        self.client.get(url_postagem_imagem_1mb, name="Post imagem 1MB", headers=self.headers)
-
-    @task(1)
-    def post_imagem_300kb(self):
-        self.client.get(url_postagem_imagem_300kb, name="Post imagem 300KB", headers=self.headers)
+class WebsiteUser(HttpUser):
+    tasks = [ExtracaoSequencial]

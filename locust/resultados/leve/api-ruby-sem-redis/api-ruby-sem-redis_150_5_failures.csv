@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences
+GET,api-ruby-sem-redis,HTTPError('500 Server Error: Internal Server Error for url: api-ruby-sem-redis'),1

@@ -39,24 +39,24 @@ services:
   redis-py:
     image: redis
 
-  # # =========================
-  # # RUBY SEM REDIS
-  # # =========================
-  # web-ruby-sem-redis:
-  #   image: linkextractor-web:step6-php
-  #   build: ./www
-  #   ports:
-  #     - "8082:80"
-  #   environment:
-  #     - API_ENDPOINT=http://api-ruby-sem-redis:4567/api/
+  # =========================
+  # RUBY SEM REDIS
+  # =========================
+  web-ruby-sem-redis:
+    image: linkextractor-web:step6-php
+    build: ./link-extractor/linkextractor-step7/www
+    ports:
+      - "8082:80"
+    environment:
+      - API_ENDPOINT=http://api-ruby-sem-redis:4567/api/
 
-  # api-ruby-sem-redis:
-  #   image: linkextractor-api:step6-ruby
-  #   build: ./api
-  #   ports:
-  #     - "4567:4567"
-  #   volumes:
-  #     - ./logs:/app/logs
+  api-ruby-sem-redis:
+    image: linkextractor-api:step7-ruby
+    build: ./link-extractor/linkextractor-step7/api
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./logs:/app/logs
 
   # =========================
   # RUBY COM REDIS
@@ -85,13 +85,13 @@ services:
   # =========================
   # LOCUST
   # =========================
-  # locust:
-  #   image: locustio/locust
-  #   container_name: locust
-  #   ports:
-  #     - "8089:8089"
-  #   volumes:
-  #     - ./locust:/mnt/locust
-  #     - ./data:/mnt/data
-  #   working_dir: /mnt/locust
-  #   command: -f teste-carga.py --host=http://web-py-redis
+  locust:
+    image: locustio/locust
+    container_name: locust
+    ports:
+      - "8084:80"
+    volumes:
+      - ./locust:/mnt/locust
+      - ./data:/mnt/data
+    working_dir: /mnt/locust
+    # command: -f teste-carga.py --host=http://web-py-redis

@@ -1,82 +1,47 @@
 @echo off
 setlocal enabledelayedexpansion
 
-set TEMPO=2m
-set HOST=http://nginx
+:: Arrays simulados
+set tipo_teste[0]=leve
+set tipo_teste[1]=medio
+set tipo_teste[2]=pesado
 
-echo Iniciando bateria de 36 testes...
+set tipo_servico[0]=api-py-sem-redis
+set tipo_servico[1]=api-py-redis
+set tipo_servico[2]=api-ruby-sem-redis
+set tipo_servico[3]=api-ruby-redis
 
-call :rodar_instancia 1
-call :rodar_instancia 2
-call :rodar_instancia 3
+set servico_url[0]=http://api-py-sem-redis:5000
+set servico_url[1]=http://api-py-redis:5000
+set servico_url[2]=http://api-ruby-sem-redis:4567
+set servico_url[3]=http://api-ruby-redis:4567
 
-echo.
-echo Todos os 36 testes foram finalizados.
-pause
-exit /b
+set u[0]=150
+set u[1]=250
+set u[2]=350
 
+set r[0]=5
+set r[1]=5
+set r[2]=5
 
-:rodar_instancia
-set INSTANCIA=%1
+:: Loop principal
+for /L %%i in (0,1,2) do (
+    for /L %%j in (0,1,3) do (
 
-echo.
-echo ==========================================
-echo Configurando Nginx para %INSTANCIA% instancia(s)
-echo ==========================================
+        echo Executando teste !tipo_teste[%%i]! para !tipo_servico[%%j]!
 
-copy /Y nginx\nginx-%INSTANCIA%.conf nginx\nginx.conf
+        docker compose run --rm locust ^
+        -f teste-carga.py ^
+        --request-name=!tipo_servico[%%j]! ^
+        --host=!servico_url[%%j]! ^
+        --headless ^
+        -u !u[%%i]! ^
+        -r !r[%%i]! ^
+        -t 1m ^
+        --csv=./resultados/!tipo_teste[%%i]!/!tipo_servico[%%j]!/!tipo_servico[%%j]!_!u[%%i]!_!r[%%i]!
 
-docker restart nginx
-
-echo Aguardando Nginx reiniciar...
-timeout /t 8 /nobreak
-
-call :rodar_carga leve 150 20 %INSTANCIA%
-call :rodar_carga medio 250 20 %INSTANCIA%
-call :rodar_carga pesado 350 20 %INSTANCIA%
-
-exit /b
-
-
-:rodar_carga
-set CARGA=%1
-set USUARIOS=%2
-set SPAWN=%3
-set INSTANCIA=%4
-
-call :rodar_teste %CARGA% %INSTANCIA% post_texto_400kb teste-carga-texto-400kb.py %USUARIOS% %SPAWN%
-call :rodar_teste %CARGA% %INSTANCIA% post_imagem_1mb teste-carga-imagem-1mb.py %USUARIOS% %SPAWN%
-call :rodar_teste %CARGA% %INSTANCIA% post_imagem_300kb teste-carga-imagem-300kb.py %USUARIOS% %SPAWN%
-call :rodar_teste %CARGA% %INSTANCIA% todos teste-carga-todos.py %USUARIOS% %SPAWN%
-
-exit /b
-
-
-:rodar_teste
-set CARGA=%1
-set INSTANCIA=%2
-set CENARIO=%3
-set ARQUIVO=%4
-set USUARIOS=%5
-set SPAWN=%6
-
-echo.
-echo ------------------------------------------
-echo Classe: %CARGA% ^| Instancia: %INSTANCIA% ^| Teste: %CENARIO%
-echo Usuarios: %USUARIOS% ^| Spawn: %SPAWN% ^| Tempo: %TEMPO%
-echo ------------------------------------------
-
-if not exist locust\resultados\%CARGA%\instancia_%INSTANCIA%\%CENARIO% (
-  mkdir locust\resultados\%CARGA%\instancia_%INSTANCIA%\%CENARIO%
+    )
 )
 
-docker compose run --rm locust ^
-  -f %ARQUIVO% ^
-  --host=%HOST% ^
-  --headless ^
-  -u %USUARIOS% ^
-  -r %SPAWN% ^
-  -t %TEMPO% ^
-  --csv=/mnt/locust/resultados/%CARGA%/instancia_%INSTANCIA%/%CENARIO%/%CENARIO%_%USUARIOS%_usuarios
-
-exit /b
+endlocal
+pause

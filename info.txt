@@ -1,0 +1,4 @@
+localhost:8080 - api python sem redis
+localhost:8081 - api python com redis
+localhost:8082 - api ruby sem redis
+localhost:8083 - api ruby com redis
