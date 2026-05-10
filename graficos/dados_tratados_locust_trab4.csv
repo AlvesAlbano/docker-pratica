@@ -1,0 +1,13 @@
+﻿Carga,CargaRaw,Cenario,CenarioRaw,Linguagem,TemRedis,Usuarios,Requisicoes,Falhas,Erro,TempoMedio,Mediana,P95,RPS
+Carga leve,leve,Python + Redis,api-py-redis,Python,True,150,15357,0,0.0,424.7257986528681,130.0,2000.0,258.7050065685249
+Carga leve,leve,Python sem Redis,api-py-sem-redis,Python,False,150,76,30,39.47,25689.333193065813,24000.0,46000.0,1.2980403236711704
+Carga leve,leve,Ruby + Redis,api-ruby-redis,Ruby,True,150,300,0,0.0,23.933347869982143,16.0,59.0,15.661436190004832
+Carga leve,leve,Ruby sem Redis,api-ruby-sem-redis,Ruby,False,150,490,1,0.2,5002.758317575499,3100.0,18000.0,11.404011215833863
+Carga média,médio,Python + Redis,api-py-redis,Python,True,250,18825,0,0.0,426.4395995740207,110.0,2600.0,318.8842059370289
+Carga média,médio,Python sem Redis,api-py-sem-redis,Python,False,250,127,48,37.8,22407.214875149577,22000.0,42000.0,2.1660113425418057
+Carga média,médio,Ruby + Redis,api-ruby-redis,Ruby,True,250,300,0,0.0,20.96770796996073,15.0,57.0,15.723742643806805
+Carga média,médio,Ruby sem Redis,api-ruby-sem-redis,Ruby,False,250,300,25,8.33,5377.78906457334,2200.0,18000.0,7.925039173573176
+Carga pesada,pesado,Python + Redis,api-py-redis,Python,True,350,18868,0,0.0,421.7574131093901,100.0,3100.0,319.2644793436845
+Carga pesada,pesado,Python sem Redis,api-py-sem-redis,Python,False,350,111,43,38.74,25662.88017463964,26000.0,42000.0,1.885957943918419
+Carga pesada,pesado,Ruby + Redis,api-ruby-redis,Ruby,True,350,300,0,0.0,246.46187410002017,32.0,1900.0,15.625856242806073
+Carga pesada,pesado,Ruby sem Redis,api-ruby-sem-redis,Ruby,False,350,532,3,0.56,5892.434015900388,3200.0,23000.0,10.471375587485388

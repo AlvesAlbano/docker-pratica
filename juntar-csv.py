@@ -1,3 +1,4 @@
+import re
 import pandas as pd
 from pathlib import Path
 
@@ -5,42 +6,40 @@ pasta_raiz = Path("locust/resultados")
 
 dfs = []
 
-for arquivo in pasta_raiz.rglob("*_stats.csv"):
-    print(arquivo)
-    df = pd.read_csv(arquivo)
-
-    # remove Aggregated
-    # comenta para pegar os aggregated
-    df = df[df["Name"] != "Aggregated"]
+for arquivo in sorted(pasta_raiz.rglob("*_stats.csv")):
+    if arquivo.name.endswith("_stats_history.csv"):
+        continue
 
     partes = arquivo.parts
 
-    classe = partes[2]
-    # instancia = int(partes[3].split("_")[1])
-    redis = partes[3]
-    linguagem_api = partes[3].split("-")[1]
-    bp = 0
+    # Pula pastas do trabalho 3 (instancia_X)
+    if any(p.startswith("instancia_") for p in partes):
+        continue
 
-    if "sem-redis" in redis:
-        tem_redis = True
-    else:
-        tem_redis = False
+    df = pd.read_csv(arquivo)
+    df = df[df["Name"] != "Aggregated"]
 
-    if linguagem_api == "py":
-        tipo_linguagem = "Python"
-    else:
-        tipo_linguagem = "Ruby"
+    carga_raw   = partes[2]
+    cenario_raw = partes[3]
 
-    nome = arquivo.stem
-    qtd_usuarios = int([p for p in nome.split("_") if p.isdigit()][0])
+    linguagem_api = "Python" if "-py-" in cenario_raw else "Ruby"
 
-    df["classe"] = classe
+    # Corrigido: sem-redis = False, com redis = True
+    tem_redis = "sem-redis" not in cenario_raw
+
+    match_usuarios = re.search(r"_(\d+)_\d+_stats\.csv$", arquivo.name)
+    qtd_usuarios = int(match_usuarios.group(1)) if match_usuarios else None
+
+    df["classe"]       = carga_raw
     df["qtd_usuarios"] = qtd_usuarios
-    df["tem_redis"] = tem_redis
-    df["linguagem_api"] = tipo_linguagem
+    df["tem_redis"]    = tem_redis
+    df["linguagem_api"] = linguagem_api
+    df["cenario"]      = cenario_raw
 
+    print(arquivo)
     dfs.append(df)
 
 df_final = pd.concat(dfs, ignore_index=True)
-
 df_final.to_csv("resultado_final_stats.csv", index=False)
+
+print(f"\nFinalizado. {len(df_final)} linhas salvas em resultado_final_stats.csv")

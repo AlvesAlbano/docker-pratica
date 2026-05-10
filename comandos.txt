@@ -1,0 +1,14 @@
+cd C:\Users\edine\OneDrive\Desktop\NaborDocker\docker-pratica
+
+copy nginx\nginx-3.conf nginx\nginx.conf
+docker restart nginx
+
+cp nginx/nginx-3.conf nginx/nginx.conf
+docker restart nginx
+
+curl -I http://localhost:8080/
+
+docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless -u 150 -r 75 -t 2m --csv=./resultados/medio/vaikrl
+
+docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless -u 150 -r 75 -t 2m --csv=/mnt/data/teste_leve_2instancias_150usuarios
+docker compose run --rm locust -f teste-carga.py --host=http://nginx --headless -u 300 -r 150 -t 2m --csv=/mnt/data/teste_medio_2instancias_300usuarios
