@@ -209,30 +209,6 @@ services:
 
 ## Resultados dos Testes
 
-### Tempo Médio de Resposta — Todos os Cenários por Nº de Usuários
-
-![Tempo médio por usuários](graficos/01_geral_tempo_medio_por_usuarios.png)
-
-Python sem Redis apresenta tempo médio entre 22.000 e 25.000 ms em todos os níveis de carga, dominando completamente o gráfico. Python + Redis e Ruby + Redis ficam próximos de zero na escala, confirmando que o cache elimina praticamente toda a latência independente da quantidade de usuários.
-
----
-
-### P95 de Tempo de Resposta — Todos os Cenários por Nº de Usuários
-
-![P95 por usuários](graficos/02_geral_p95_por_usuarios.png)
-
-O P95 do Python sem Redis ultrapassa 40.000 ms já na carga leve, indicando que 5% das requisições mais lentas sofrem esperas extremas. Ruby sem Redis também apresenta P95 elevado (~18.000–23.000 ms), enquanto os cenários com Redis se mantêm abaixo de 3.200 ms em todos os níveis.
-
----
-
-### Taxa de Falha — Todos os Cenários por Nº de Usuários
-
-![Taxa de falha por usuários](graficos/03_geral_taxa_falha_por_usuarios.png)
-
-Python sem Redis registra cerca de 39% de falhas em todos os níveis de carga — o servidor simplesmente não consegue atender as requisições a tempo. Ruby sem Redis apresenta falhas pontuais de até 8,3% na carga média. Todos os cenários com Redis mantêm 0% de falha.
-
----
-
 ### Tempo Médio por Cenário e Nível de Carga
 
 ![Tempo médio por cenário](graficos/04_geral_tempo_medio_por_cenario.png)
@@ -254,6 +230,30 @@ Os cenários sem Redis concentram os maiores P95 independente da linguagem, conf
 ![Taxa de falha por cenário](graficos/06_geral_taxa_falha_por_cenario.png)
 
 As falhas se concentram exclusivamente nos cenários sem Redis. Python sem Redis é consistentemente o pior, com ~39% em todas as cargas. Ruby sem Redis apresenta comportamento irregular — 0,3% na leve, pico de 8,3% na média, caindo para 0,6% na pesada — sugerindo instabilidade no serviço durante os testes.
+
+---
+
+### Tempo Médio de Resposta — Todos os Cenários por Nº de Usuários
+
+![Tempo médio por usuários](graficos/01_geral_tempo_medio_por_usuarios.png)
+
+Python sem Redis apresenta tempo médio entre 22.000 e 25.000 ms em todos os níveis de carga, dominando completamente o gráfico. Python + Redis e Ruby + Redis ficam próximos de zero na escala, confirmando que o cache elimina praticamente toda a latência independente da quantidade de usuários.
+
+---
+
+### P95 de Tempo de Resposta — Todos os Cenários por Nº de Usuários
+
+![P95 por usuários](graficos/02_geral_p95_por_usuarios.png)
+
+O P95 do Python sem Redis ultrapassa 40.000 ms já na carga leve, indicando que 5% das requisições mais lentas sofrem esperas extremas. Ruby sem Redis também apresenta P95 elevado (~18.000–23.000 ms), enquanto os cenários com Redis se mantêm abaixo de 3.200 ms em todos os níveis.
+
+---
+
+### Taxa de Falha — Todos os Cenários por Nº de Usuários
+
+![Taxa de falha por usuários](graficos/03_geral_taxa_falha_por_usuarios.png)
+
+Python sem Redis registra cerca de 39% de falhas em todos os níveis de carga — o servidor simplesmente não consegue atender as requisições a tempo. Ruby sem Redis apresenta falhas pontuais de até 8,3% na carga média. Todos os cenários com Redis mantêm 0% de falha.
 
 ---
 
