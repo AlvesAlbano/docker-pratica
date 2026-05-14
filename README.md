@@ -75,11 +75,11 @@ class WebsiteUser(HttpUser):
 
 ### URLs Utilizadas nos Testes
 
-As 10 URLs foram escolhidas para simular um mix realista de páginas com diferentes volumes de links. As páginas do portal `gov.br/saude` têm entre 496 e 528 links cada, formando o núcleo do teste. A página principal do `gov.br/pt-br` retorna 252 links. O portal da Unifor (`unifor.br/web/graduacao/medicina`) é a página com mais links de toda a sequência, com 1111 referências, exigindo maior esforço de scraping. As duas páginas do G1 (`campinas-regiao` e `saude`) têm 707 e 692 links respectivamente, com conteúdo jornalístico dinâmico. Essa variação entre páginas mais simples e mais densas em links torna o teste mais representativo de uso real.
+As 10 URLs foram escolhidas para simular um mix realista de páginas com diferentes volumes de links. As páginas do portal `gov.br/saude` têm entre 496 e 528 links cada, formando o núcleo do teste. A página principal do `gov.br/pt-br` retorna 252 links. O portal da Unifor (`unifor.br/web/graduacao/medicina`) é a página com mais links de toda a sequência, com 1929 referências, exigindo maior esforço de scraping. As duas páginas do G1 (`campinas-regiao` e `saude`) têm 707 e 692 links respectivamente, com conteúdo jornalístico dinâmico. Essa variação entre páginas mais simples e mais densas em links torna o teste mais representativo de uso real.
 
 | URL | Links extraídos |
 |---|---|
-| unifor.br/web/graduacao/medicina | 1111 |
+| unifor.br/web/graduacao/medicina | 1929 |
 | g1.globo.com/sp/campinas-regiao/...ype-anvisa... | 707 |
 | g1.globo.com/saude/...hantavirus... | 692 |
 | gov.br/saude/.../saude-com-ciencia | 528 |
