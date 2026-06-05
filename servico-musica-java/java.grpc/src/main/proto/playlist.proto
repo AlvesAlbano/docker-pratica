@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "servico.java.grpc.proto";
+option java_outer_classname = "PlaylistProto";
+
+service PlaylistService {
+
+  rpc PlaylistsPorUsuario (PlaylistPorUsuarioRequest)
+      returns (PlaylistListResponse);
+
+  rpc PlaylistsPorMusica (PlaylistPorMusicaRequest)
+      returns (PlaylistListResponse);
+}
+
+message PlaylistPorUsuarioRequest {
+  int64 idUsuario = 1;
+}
+
+message PlaylistPorMusicaRequest {
+  int64 idMusica = 1;
+}
+
+message PlaylistResponse {
+  int64 id = 1;
+  string nome = 2;
+}
+
+message PlaylistListResponse {
+  repeated PlaylistResponse playlists = 1;
+}

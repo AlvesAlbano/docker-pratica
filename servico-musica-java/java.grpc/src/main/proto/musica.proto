@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "servico.java.grpc.proto";
+option java_outer_classname = "MusicaProto";
+
+service MusicaService {
+  rpc TodasAsMusicas (TodasMusicasRequest) returns (TodasMusicasResponse);
+}
+
+message TodasMusicasRequest {
+}
+
+message MusicaResponse {
+  int64 id = 1;
+  string nome = 2;
+  string artista = 3;
+}
+
+message TodasMusicasResponse {
+  repeated MusicaResponse musicas = 1;
+}

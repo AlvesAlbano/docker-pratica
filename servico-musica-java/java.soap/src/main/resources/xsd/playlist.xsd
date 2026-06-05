@@ -1,0 +1,56 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://soap.java.servico/playlist"
+           xmlns:tns="http://soap.java.servico/playlist"
+           elementFormDefault="qualified">
+
+    <!-- ===================== -->
+    <!-- REQUEST: por usuário -->
+    <!-- ===================== -->
+    <xs:element name="getPlaylistsByUsuarioRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="idUsuario" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- RESPONSE: por usuário -->
+    <xs:element name="getPlaylistsByUsuarioResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="playlist" type="tns:playlist" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ===================== -->
+    <!-- REQUEST: por música -->
+    <!-- ===================== -->
+    <xs:element name="getPlaylistsByMusicaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="idMusica" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- RESPONSE: por música -->
+    <xs:element name="getPlaylistsByMusicaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="playlist" type="tns:playlist" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ===================== -->
+    <!-- MODEL -->
+    <!-- ===================== -->
+    <xs:complexType name="playlist">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="nome" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

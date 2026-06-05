@@ -1,0 +1,27 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://soap.java.servico/usuario"
+           xmlns:tns="http://soap.java.servico/usuario"
+           elementFormDefault="qualified">
+
+    <!-- REQUEST -->
+    <xs:element name="getTodosUsuariosRequest" type="xs:anyType"/>
+
+    <!-- RESPONSE -->
+    <xs:element name="getTodosUsuariosResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="usuario" type="tns:usuario" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- USER TYPE -->
+    <xs:complexType name="usuario">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="nome" type="xs:string"/>
+            <xs:element name="idade" type="xs:short"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

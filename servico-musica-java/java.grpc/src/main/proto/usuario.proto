@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "servico.java.grpc.proto";
+option java_outer_classname = "UsuarioProto";
+
+service UsuarioService {
+
+  rpc TodosUsuarios (UsuarioRequest)
+      returns (UsuarioListResponse);
+}
+
+message UsuarioRequest {
+}
+
+message UsuarioResponse {
+  int64 id = 1;
+  string nome = 2;
+  int32 idade = 3;
+}
+
+message UsuarioListResponse {
+  repeated UsuarioResponse usuarios = 1;
+}
