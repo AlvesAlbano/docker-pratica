@@ -1,6 +1,7 @@
 package servico.java.grpc.controller;
 
 import io.grpc.stub.StreamObserver;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
 
@@ -26,19 +27,15 @@ public class PlaylistController extends PlaylistServiceGrpc.PlaylistServiceImplB
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Transactional
     @Override
-    public void playlistsPorUsuario(
-            PlaylistPorUsuarioRequest request,
-            StreamObserver<PlaylistListResponse> responseObserver) {
+    public void playlistsPorUsuario(PlaylistPorUsuarioRequest request, StreamObserver<PlaylistListResponse> responseObserver) {
 
-        PlaylistListResponse.Builder response =
-                PlaylistListResponse.newBuilder();
+        PlaylistListResponse.Builder response = PlaylistListResponse.newBuilder();
 
-        Optional<Usuario> usuario =
-                usuarioRepository.findById(request.getIdUsuario());
+        Optional<Usuario> usuario = usuarioRepository.findById(request.getIdUsuario());
 
         if (usuario.isPresent()) {
-
             for (Playlist playlist : usuario.get().getPlaylistsUsuario()) {
 
                 response.addPlaylists(
@@ -55,18 +52,13 @@ public class PlaylistController extends PlaylistServiceGrpc.PlaylistServiceImplB
     }
 
     @Override
-    public void playlistsPorMusica(
-            PlaylistPorMusicaRequest request,
-            StreamObserver<PlaylistListResponse> responseObserver) {
+    public void playlistsPorMusica(PlaylistPorMusicaRequest request, StreamObserver<PlaylistListResponse> responseObserver) {
 
-        List<Playlist> playlists =
-                playlistRepository.findByMusicasId(request.getIdMusica());
+        List<Playlist> playlists = playlistRepository.findByMusicasId(request.getIdMusica());
 
-        PlaylistListResponse.Builder response =
-                PlaylistListResponse.newBuilder();
+        PlaylistListResponse.Builder response = PlaylistListResponse.newBuilder();
 
         for (Playlist playlist : playlists) {
-
             response.addPlaylists(
                     PlaylistResponse.newBuilder()
                             .setId(playlist.getId())

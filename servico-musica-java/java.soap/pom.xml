@@ -72,6 +72,37 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>3.2.0</version>
+
+				<executions>
+					<execution>
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<sources>
+						<source>src/main/resources/xsd/musica.xsd</source>
+						<source>src/main/resources/xsd/playlist.xsd</source>
+						<source>src/main/resources/xsd/usuario.xsd</source>
+					</sources>
+
+					<packageName>
+						servico.java.soap.generated
+					</packageName>
+
+					<outputDirectory>
+						${project.build.directory}/generated-sources/jaxb
+					</outputDirectory>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

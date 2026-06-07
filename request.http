@@ -1,0 +1,165 @@
+/*
+# Java API
+*/
+/*
+## REST
+*/
+/*
+http://localhost:8080/swagger-ui/index.html#/
+*/
+/*
+## SOAP
+*/
+POST http://localhost:8081/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:mus="http://soap.java.servico/musica">
+
+   <soapenv:Body>
+      <mus:getTodasMusicasRequest/>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+###
+POST http://localhost:8081/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:usr="http://soap.java.servico/usuario">
+
+   <soapenv:Body>
+      <usr:getTodosUsuariosRequest/>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+###
+POST http://localhost:8081/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:pl="http://soap.java.servico/playlist">
+
+   <soapenv:Body>
+      <pl:getPlaylistsByUsuarioRequest>
+         <pl:idUsuario>8</pl:idUsuario>
+      </pl:getPlaylistsByUsuarioRequest>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+###
+POST http://localhost:8081/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:pl="http://soap.java.servico/playlist">
+
+   <soapenv:Body>
+      <pl:getPlaylistsByMusicaRequest>
+         <pl:idMusica>1</pl:idMusica>
+      </pl:getPlaylistsByMusicaRequest>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+/*
+## GRPC
+*/
+###
+grpcurl -plaintext -d '{}' localhost:8082 MusicaService/TodasAsMusicas
+###
+grpcurl -plaintext   -d '{"idUsuario":8}'   localhost:8082   PlaylistService/PlaylistsPorUsuario
+###
+grpcurl -plaintext   -d '{"idMusica": 1}'   localhost:8082   PlaylistService/PlaylistsPorMusica
+###
+grpcurl -plaintext   -d '{}'   localhost:8082   UsuarioService/TodosUsuarios
+/*
+## GRAPHQL
+*/
+/*
+http://localhost:8083/graphiql
+*/
+/*
+# Kotlin API
+*/
+/*
+## SOAP
+
+*/
+###
+POST http://localhost:8085/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:mus="http://soap.java.servico/musica">
+
+   <soapenv:Body>
+      <mus:getTodasMusicasRequest/>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+###
+POST http://localhost:8085/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:usr="http://soap.java.servico/usuario">
+
+   <soapenv:Body>
+      <usr:getTodosUsuariosRequest/>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+###
+POST http://localhost:8085/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:pl="http://soap.java.servico/playlist">
+
+   <soapenv:Body>
+      <pl:getPlaylistsByUsuarioRequest>
+         <pl:idUsuario>8</pl:idUsuario>
+      </pl:getPlaylistsByUsuarioRequest>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+###
+POST http://localhost:8085/ws
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:pl="http://soap.java.servico/playlist">
+
+   <soapenv:Body>
+      <pl:getPlaylistsByMusicaRequest>
+         <pl:idMusica>1</pl:idMusica>
+      </pl:getPlaylistsByMusicaRequest>
+   </soapenv:Body>
+
+</soapenv:Envelope>
+/*
+## GRPC
+*/
+###
+grpcurl -plaintext -d '{}' localhost:8086 MusicaService/TodasAsMusicas
+###
+grpcurl -plaintext   -d '{"idUsuario":8}'   localhost:8086   PlaylistService/PlaylistsPorUsuario
+###
+grpcurl -plaintext   -d '{"idMusica": 1}'   localhost:8086   PlaylistService/PlaylistsPorMusica
+###
+grpcurl -plaintext   -d '{}'   localhost:8086   UsuarioService/TodosUsuarios
+/*
+## GRAPHQL
+
+*/
+/*
+http://localhost:8087/graphiql
+*/

@@ -2,13 +2,13 @@ package servico.java.soap.controller;
 
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
+import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
-import servico.java.soap.DTO.MusicaSoap;
-import servico.java.soap.entity.Musica;
-import servico.java.soap.repository.MusicaRepository;
-import servico.java.soap.response.GetTodasMusicasResponse;
 
-import java.util.List;
+import servico.java.soap.generated.GetTodasMusicasRequest;
+import servico.java.soap.generated.GetTodasMusicasResponse;
+import servico.java.soap.repository.MusicaRepository;
+import servico.java.soap.generated.Musica;
 
 @Endpoint
 public class MusicaController {
@@ -21,23 +21,27 @@ public class MusicaController {
         this.musicaRepository = musicaRepository;
     }
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getTodasMusicasRequest")
+    @PayloadRoot(
+            namespace = NAMESPACE_URI,
+            localPart = "getTodasMusicasRequest"
+    )
     @ResponsePayload
-    public GetTodasMusicasResponse getTodasMusicas() {
+    public GetTodasMusicasResponse getTodasMusicas(
+            @RequestPayload GetTodasMusicasRequest request) {
 
-        GetTodasMusicasResponse response = new GetTodasMusicasResponse();
+        GetTodasMusicasResponse response =
+                new GetTodasMusicasResponse();
 
-        List<Musica> musicas = musicaRepository.findAll();
+        musicaRepository.findAll().forEach(m -> {
 
-        List<MusicaSoap> musicaSoapList = musicas.stream().map(m -> {
-            MusicaSoap soap = new MusicaSoap();
-            soap.setId(m.getId());
-            soap.setNome(m.getNome());
-            soap.setArtista(m.getArtista());
-            return soap;
-        }).toList();
+            Musica soapMusica = new servico.java.soap.generated.Musica();
 
-        response.setMusicas(musicaSoapList);
+            soapMusica.setId(m.getId());
+            soapMusica.setNome(m.getNome());
+            soapMusica.setArtista(m.getArtista());
+
+            response.getMusica().add(soapMusica);
+        });
 
         return response;
     }

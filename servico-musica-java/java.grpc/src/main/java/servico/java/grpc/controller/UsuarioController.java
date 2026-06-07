@@ -20,17 +20,13 @@ public class UsuarioController extends UsuarioServiceGrpc.UsuarioServiceImplBase
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public void todosUsuarios(
-            UsuarioRequest request,
-            StreamObserver<UsuarioListResponse> responseObserver) {
+    public void todosUsuarios(UsuarioRequest request, StreamObserver<UsuarioListResponse> responseObserver) {
 
         List<Usuario> usuarios = usuarioRepository.findAll();
 
-        UsuarioListResponse.Builder response =
-                UsuarioListResponse.newBuilder();
+        UsuarioListResponse.Builder response = UsuarioListResponse.newBuilder();
 
         for (Usuario usuario : usuarios) {
-
             response.addUsuarios(
                     UsuarioResponse.newBuilder()
                             .setId(usuario.getId())

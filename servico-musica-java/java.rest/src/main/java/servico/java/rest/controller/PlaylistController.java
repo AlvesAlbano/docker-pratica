@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import servico.java.rest.entity.Musica;
 import servico.java.rest.entity.Playlist;
 import servico.java.rest.entity.Usuario;
 import servico.java.rest.repository.MusicaRepository;

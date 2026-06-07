@@ -23,8 +23,8 @@ public class WebServiceConfig {
         return new ServletRegistrationBean<>(servlet, "/ws/*");
     }
 
-    @Bean(name = "musicas")
-    public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema musicaSchema) {
+    @Bean(name = "musica")
+    public DefaultWsdl11Definition todasMusicasWsd (XsdSchema musicaSchema) {
         DefaultWsdl11Definition wsdl = new DefaultWsdl11Definition();
         wsdl.setPortTypeName("MusicaPort");
         wsdl.setLocationUri("/ws");
@@ -33,8 +33,38 @@ public class WebServiceConfig {
         return wsdl;
     }
 
+    @Bean(name = "playlist")
+    public DefaultWsdl11Definition playlistMusicaIdWsd (XsdSchema playlistSchema) {
+        DefaultWsdl11Definition wsdl = new DefaultWsdl11Definition();
+        wsdl.setPortTypeName("PlaylistPort");
+        wsdl.setLocationUri("/ws");
+        wsdl.setTargetNamespace("http://soap.java.servico/playlist");
+        wsdl.setSchema(playlistSchema);
+        return wsdl;
+    }
+
+    @Bean(name = "usuario")
+    public DefaultWsdl11Definition todosUsuariosWsd (XsdSchema usuarioSchema) {
+        DefaultWsdl11Definition wsdl = new DefaultWsdl11Definition();
+        wsdl.setPortTypeName("UsuarioPort");
+        wsdl.setLocationUri("/ws");
+        wsdl.setTargetNamespace("http://soap.java.servico/usuario");
+        wsdl.setSchema(usuarioSchema);
+        return wsdl;
+    }
+
     @Bean
     public XsdSchema musicaSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("xsd/musicas.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("xsd/musica.xsd"));
+    }
+
+    @Bean
+    public XsdSchema usuarioSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("xsd/usuario.xsd"));
+    }
+
+    @Bean
+    public XsdSchema playlistSchema() {
+        return new SimpleXsdSchema(new ClassPathResource("xsd/playlist.xsd"));
     }
 }

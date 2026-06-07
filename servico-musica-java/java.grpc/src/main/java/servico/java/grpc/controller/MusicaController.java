@@ -20,14 +20,11 @@ public class MusicaController extends MusicaServiceGrpc.MusicaServiceImplBase {
     private MusicaRepository musicaRepository;
 
     @Override
-    public void todasAsMusicas(
-            TodasMusicasRequest request,
-            StreamObserver<TodasMusicasResponse> responseObserver) {
+    public void todasAsMusicas(TodasMusicasRequest request, StreamObserver<TodasMusicasResponse> responseObserver) {
 
         List<Musica> musicas = musicaRepository.findAll();
 
-        TodasMusicasResponse.Builder response =
-                TodasMusicasResponse.newBuilder();
+        TodasMusicasResponse.Builder response = TodasMusicasResponse.newBuilder();
 
         for (Musica musica : musicas) {
 

@@ -1,0 +1,83 @@
+services:
+    java-rest:
+        image: java-rest
+        container_name: rest-api-java
+        build:
+          context: ./servico-musica-java/java.rest
+          dockerfile: Dockerfile
+        ports:
+          - 8080:8080
+
+    java-soap:
+        image: java-soap
+        container_name: soap-api-java
+        build:
+          context: ./servico-musica-java/java.soap/
+          dockerfile: Dockerfile
+        ports:
+          - 8081:8081
+
+    java-grpc:
+        image: java-grpc
+        container_name: grpc-api-java
+        build:
+          context: ./servico-musica-java/java.grpc/
+          dockerfile: Dockerfile
+        ports:
+          - 8082:8082
+
+    java-graphql:
+        image: java-graphql
+        container_name: graphql-api-java
+        build:
+          context: ./servico-musica-java/java.graphql/
+          dockerfile: Dockerfile
+        ports:
+          - 8083:8083
+
+
+    kotlin-rest:
+        image: kotlin-rest
+        container_name: rest-api-kotlin
+        build:
+          context: ./servico-musica-kotlin/kotlin.rest/
+          dockerfile: Dockerfile
+        ports:
+          - 8084:8084
+
+    kotlin-soap:
+        image: kotlin-soap
+        container_name: soap-api-kotlin
+        build:
+          context: ./servico-musica-kotlin/kotlin.soap/
+          dockerfile: Dockerfile
+        ports:
+          - 8085:8085
+
+    kotlin-grpc:
+        image: kotlin-grpc
+        container_name: grpc-api-kotlin
+        build:
+          context: ./servico-musica-kotlin/kotlin.grpc/
+          dockerfile: Dockerfile
+        ports:
+          - 8086:8086
+
+    kotlin-graphql:
+        image: kotlin-graphql
+        container_name: graphql-api-kotlin
+        build:
+          context: ./servico-musica-kotlin/kotlin.graphql/
+          dockerfile: Dockerfile
+        ports:
+          - 8087:8087
+
+    # locust:
+    #     image: locustio/locust
+    #     container_name: locust
+    #     ports:
+    #       - 8080:8084
+    #     volumes:
+    #       - ./locust:/mnt/locust
+    #       - ./data:/mnt/data
+    #     working_dir: /mnt/locust

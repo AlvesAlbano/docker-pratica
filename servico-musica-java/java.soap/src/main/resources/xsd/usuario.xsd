@@ -4,7 +4,11 @@
            elementFormDefault="qualified">
 
     <!-- REQUEST -->
-    <xs:element name="getTodosUsuariosRequest" type="xs:anyType"/>
+    <xs:element name="getTodosUsuariosRequest">
+        <xs:complexType>
+            <xs:sequence/>
+        </xs:complexType>
+    </xs:element>
 
     <!-- RESPONSE -->
     <xs:element name="getTodosUsuariosResponse">
