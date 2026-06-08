@@ -1,0 +1,63 @@
+package servico.kotlin.graphql.config
+
+import org.springframework.boot.CommandLineRunner
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import servico.kotlin.graphql.repository.MusicaRepository
+import servico.kotlin.graphql.repository.PlaylistRepository
+import servico.kotlin.graphql.repository.UsuarioRepository
+import servico.kotlin.graphql.entity.Musica
+import servico.kotlin.graphql.entity.Playlist
+import servico.kotlin.graphql.entity.Usuario
+
+@Configuration
+open class BancoInit {
+
+    @Bean
+    open fun commandLineRunner(
+        musicaRepository: MusicaRepository,
+        playlistRepository: PlaylistRepository,
+        usuarioRepository: UsuarioRepository
+    ): CommandLineRunner {
+
+        return CommandLineRunner {
+
+            for (i in 0..199) {
+                musicaRepository.save(
+                    Musica(
+                        "Musica $i",
+                        "Artista $i"
+                    )
+                )
+            }
+
+            val min: Short = 16
+            val max: Short = 45
+
+            for (i in 0..199) {
+                val idade = (min + (Math.random() * ((max - min) + 1)).toInt()).toShort()
+
+                usuarioRepository.save(
+                    Usuario(
+                        "Usuario $i",
+                        idade
+                    )
+                )
+            }
+
+            val musicas = musicaRepository.findAll().toMutableList()
+
+            for (usuario in usuarioRepository.findAll()) {
+
+                val playlist = Playlist("playlist do usuario de id ${usuario.id}")
+                playlist.usuario = usuario
+
+                musicas.shuffle()
+
+                playlist.musicas.addAll(musicas.take(3))
+
+                playlistRepository.save(playlist)
+            }
+        }
+    }
+}

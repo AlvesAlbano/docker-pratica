@@ -1,6 +1,5 @@
 package servico.kotlin.grpc.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 @Entity
@@ -15,7 +14,6 @@ class Musica {
         private set
 
     @ManyToMany(mappedBy = "musicas")
-    @JsonIgnore
     val playlists: MutableList<Playlist> = ArrayList()
 
     protected constructor()

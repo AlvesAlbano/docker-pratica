@@ -1,6 +1,5 @@
 package servico.kotlin.grpc.entity
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
 @Entity
@@ -19,7 +18,6 @@ class Playlist {
 //    @JvmField
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonIgnore
     var usuario: Usuario? = null
 
     protected constructor()

@@ -1,6 +1,5 @@
 package servico.java.grpc.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,7 +14,6 @@ public class Musica {
     private String artista;
 
     @ManyToMany(mappedBy = "musicas")
-    @JsonIgnore
     private List<Playlist> playlists;
 
     protected Musica() {

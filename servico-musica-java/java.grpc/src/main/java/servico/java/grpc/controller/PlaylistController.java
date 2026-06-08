@@ -4,14 +4,9 @@ import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.server.service.GrpcService;
-
 import servico.java.grpc.entity.Playlist;
 import servico.java.grpc.entity.Usuario;
-import servico.java.grpc.proto.PlaylistListResponse;
-import servico.java.grpc.proto.PlaylistResponse;
-import servico.java.grpc.proto.PlaylistServiceGrpc;
-import servico.java.grpc.proto.PlaylistPorUsuarioRequest;
-import servico.java.grpc.proto.PlaylistPorMusicaRequest;
+import servico.java.grpc.proto.*;
 import servico.java.grpc.repository.PlaylistRepository;
 import servico.java.grpc.repository.UsuarioRepository;
 

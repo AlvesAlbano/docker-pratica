@@ -72,12 +72,12 @@ services:
         ports:
           - 8087:8087
 
-    # locust:
-    #     image: locustio/locust
-    #     container_name: locust
-    #     ports:
-    #       - 8080:8084
-    #     volumes:
-    #       - ./locust:/mnt/locust
-    #       - ./data:/mnt/data
-    #     working_dir: /mnt/locust
+    locust:
+      image: locustio/locust
+      container_name: locust
+      ports:
+        - 8088:8088
+      volumes:
+        - ./locust:/mnt/locust
+        - ./data:/mnt/data
+      working_dir: /mnt/locust
