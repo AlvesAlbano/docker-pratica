@@ -77,6 +77,12 @@ grpcurl -plaintext   -d '{"idMusica": 1}'   localhost:8082   PlaylistService/Pla
 ###
 grpcurl -plaintext   -d '{}'   localhost:8082   UsuarioService/TodosUsuarios
 /*
+## GRAPHQL
+*/
+/*
+http://localhost:8083/graphiql
+*/
+/*
 # Kotlin API
 */
 /*
@@ -86,7 +92,7 @@ grpcurl -plaintext   -d '{}'   localhost:8082   UsuarioService/TodosUsuarios
 http://localhost:8084/swagger-ui/index.html#/
 */
 /*
-## GRPC
+## SOAP
 */
 ###
 POST http://localhost:8085/ws
