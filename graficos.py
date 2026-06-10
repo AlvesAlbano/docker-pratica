@@ -230,6 +230,57 @@ def plot_error_rate_comparison(df):
 
     plt.close()
 
+def plot_error_rate_comparison_por_carga(
+        df,
+        linguagem:str=None,
+        carga:str=None
+):
+
+
+    df = df[
+        df["linguagem"].str.lower()
+        == linguagem.lower()
+    ]
+
+    agg = (
+        df.groupby(["tipo_api", "linguagem"])["Error Rate (%)"]
+        .mean()
+        .reset_index()
+    )
+
+    pivot = agg.pivot(
+        index="tipo_api",
+        columns="linguagem",
+        values="Error Rate (%)"
+    )
+
+    plt.figure(figsize=(10, 6))
+
+    pivot.plot(
+        kind="bar",
+        ax=plt.gca()
+    )
+
+    plt.title(
+        f"Taxa de Erro por Tecnologia - {carga.capitalize()}"
+    )
+
+    plt.xlabel("Tecnologia")
+    plt.ylabel("Taxa de Erro (%)")
+
+    plt.xticks(rotation=0)
+
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR /
+        f"taxa_erro_{linguagem}_{carga}.png",
+        dpi=300,
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
 def plot_error_rate_by_language(
     df,
     language
@@ -264,7 +315,7 @@ def plot_error_rate_by_language(
 
     plt.savefig(
         OUTPUT_DIR /
-        f"{language}_taxa_erro.png",
+        f"taxa_erro_{language}.png",
         dpi=300,
         bbox_inches="tight"
     )
@@ -272,9 +323,49 @@ def plot_error_rate_by_language(
     plt.close()
 
 
-def main():
-    df = load_data()
-    
+def plot_error_rate_by_language_por_carga(
+    df,
+    language:str,
+    carga:str
+):
+
+    df = df[
+        df["linguagem"].str.lower()
+        == language.lower()
+    ]
+
+    values = (
+        df.groupby("tipo_api")["Error Rate (%)"]
+        .mean()
+    )
+
+    plt.figure(figsize=(10, 6))
+
+    values.plot(kind="bar")
+
+    plt.title(
+        f"Taxa de Erro - {language.capitalize()} ({carga})"
+    )
+
+    plt.xlabel("Tecnologia")
+    plt.ylabel("Taxa de Erro (%)")
+
+    plt.xticks(rotation=0)
+
+    plt.tight_layout()
+
+    plt.savefig(
+        OUTPUT_DIR /
+        f"taxa_erro_{language}_{carga}.png",
+        dpi=300,
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+def generate_all_graphs(df):
+    df = df.copy()
+
     df["Error Rate (%)"] = (
         df["Failure Count"] / df["Request Count"]
     ) * 100
@@ -290,7 +381,7 @@ def main():
         "java",
         "Average Response Time",
         "Latência Média - Java",
-        "java_latencia_media.png",
+        "latencia_media_java.png",
         "Latência Média (ms)",
     )
 
@@ -299,7 +390,7 @@ def main():
         "java",
         "95%",
         "P95 - Java",
-        "java_p95.png",
+        "p95_java.png",
         "P95 (ms)",
     )
 
@@ -308,46 +399,135 @@ def main():
         "java",
         "Requests/s",
         "Requisições por Segundo - Java",
-        "java_rps.png",
+        "rps_java.png",
         "Requisições/s",
     )
-
 
     plot_metric_by_language(
         df_agg,
         "kotlin",
         "Average Response Time",
         "Latência Média - Kotlin",
-        "kotlin_latencia_media.png",
+        "latencia_media_kotlin.png",
         "Latência Média (ms)",
     )
-    
+
     plot_metric_by_language(
         df_agg,
         "kotlin",
         "95%",
         "P95 - Kotlin",
-        "kotlin_p95.png",
+        "p95_kotlin.png",
         "P95 (ms)",
     )
-    
+
     plot_metric_by_language(
         df_agg,
         "kotlin",
         "Requests/s",
         "Requisições por Segundo - Kotlin",
-        "kotlin_rps.png",
+        "rps_kotlin.png",
         "Requisições/s",
     )
-    
-    plot_error_rate_comparison(df)
-    plot_error_rate_by_language(df,"java")
-    plot_error_rate_by_language(df,"kotlin")
 
-    print(
-        f"Gráficos salvos em: {OUTPUT_DIR.resolve()}"
+    plot_error_rate_comparison(df)
+    plot_error_rate_by_language(df, "java")
+    plot_error_rate_by_language(df, "kotlin")
+
+
+def generate_all_graphs_por_carga(df,linguagem:str,carga_tipo:str):
+    df = df.copy()
+
+    df["Error Rate (%)"] = (
+        df["Failure Count"] / df["Request Count"]
+    ) * 100
+
+    df_agg = aggregate(df)
+
+    plot_avg_latency(df_agg)
+    plot_p95(df_agg)
+    plot_rps(df_agg)
+
+    plot_metric_by_language(
+        df_agg,
+        linguagem,
+        "Average Response Time",
+        f"Latência Média - {linguagem.capitalize()} - {carga_tipo.capitalize()}",
+        f"latencia_media_{linguagem}_{carga_tipo}.png",
+        "Latência Média (ms)",
     )
 
+    plot_metric_by_language(
+        df_agg,
+        linguagem,
+        "95%",
+        f"P95 - {linguagem.capitalize()} - {carga_tipo.capitalize()}",
+        f"p95_{linguagem}__{carga_tipo}.png",
+        "P95 (ms)",
+    )
+
+    plot_metric_by_language(
+        df_agg,
+        linguagem,
+        "Requests/s",
+        f"Requisições por Segundo - {linguagem.capitalize()} - {carga_tipo.capitalize()}",
+        f"rps_{linguagem}_{carga_tipo}.png",
+        "Requisições/s",
+    )
+
+    plot_error_rate_comparison_por_carga(df,linguagem,carga_tipo)
+
+    plot_error_rate_by_language_por_carga(df, linguagem,carga_tipo)
+
+def main():
+    global OUTPUT_DIR
+
+    df = load_data()
+
+    # ==================================
+    # Todos os dados
+    # ==================================
+
+    OUTPUT_DIR = Path("./graficos/todos")
+    OUTPUT_DIR.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    generate_all_graphs(df)
+
+    # ==================================
+    # Por carga
+    # ==================================
+
+
+    for linguagem in ["java","kotlin"]:
+        for carga in ["leve","medio","pesado"]:
+
+            df_filtrado = df[
+                (df["linguagem"].str.lower() == linguagem.lower())
+                &
+                (df["carga"].str.lower() == carga.lower())
+            ]
+
+            OUTPUT_DIR = Path(
+                f"./graficos/{linguagem}/{carga}"
+            )
+
+            OUTPUT_DIR.mkdir(
+                parents=True,
+                exist_ok=True
+            )
+
+            generate_all_graphs_por_carga(df_filtrado,linguagem,carga)
+
+            print(
+                f"Gráficos gerados para carga: {carga}"
+            )
+
+        print(
+            "\nTodos os gráficos foram gerados."
+        )
 
 if __name__ == "__main__":
     main()

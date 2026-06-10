@@ -20,9 +20,13 @@ open class BancoInit {
         usuarioRepository: UsuarioRepository
     ): CommandLineRunner {
 
+        val QTD_MUSICAS = 1000
+        val QTD_USUARIOS = 1000
+        val QTD_MUSICAS_PLAYLIST = 4
+
         return CommandLineRunner {
 
-            for (i in 0..199) {
+            for (i in 0..QTD_MUSICAS) {
                 musicaRepository.save(
                     Musica(
                         "Musica $i",
@@ -34,7 +38,7 @@ open class BancoInit {
             val min: Short = 16
             val max: Short = 45
 
-            for (i in 0..199) {
+            for (i in 0..QTD_USUARIOS) {
                 val idade = (min + (Math.random() * ((max - min) + 1)).toInt()).toShort()
 
                 usuarioRepository.save(
@@ -54,7 +58,7 @@ open class BancoInit {
 
                 musicas.shuffle()
 
-                playlist.musicas.addAll(musicas.take(3))
+                playlist.musicas.addAll(musicas.take(QTD_MUSICAS_PLAYLIST))
 
                 playlistRepository.save(playlist)
             }

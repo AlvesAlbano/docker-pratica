@@ -4,7 +4,7 @@ tipo_teste=("leve" "medio" "pesado")
 tipo_api=("rest" "soap" "graphql")
 
 u=(100 200 300)
-r=(15 30 45)
+r=(15 30 75)
 
 api_url_java=(
   "http://java-rest:8080"
@@ -12,37 +12,37 @@ api_url_java=(
   "http://java-graphql:8083"
 )
 
-# # JAVA LOCUST
-# for j in "${!tipo_teste[@]}"; do
-#   for x in "${!tipo_api[@]}"; do
-#     docker compose run --rm locust -f "teste-carga-${tipo_api[$x]}-java.py" \
-#       --host="${api_url_java[$x]}" \
-#       --headless \
-#       -u "${u[$j]}" \
-#       -r "${r[$j]}" \
-#       -t 2s \
-#       --csv="./resultados/${tipo_teste[$j]}/api-${tipo_api[$x]}-java/api-${tipo_api[$x]}-java_${tipo_teste[$j]}_u${u[$j]}_r${r[$j]}"
-#   done
-# done
+# JAVA LOCUST
+for j in "${!tipo_teste[@]}"; do
+  for x in "${!tipo_api[@]}"; do
+    docker compose run --rm locust -f "teste-carga-${tipo_api[$x]}-java.py" \
+      --host="${api_url_java[$x]}" \
+      --headless \
+      -u "${u[$j]}" \
+      -r "${r[$j]}" \
+      -t 1m \
+      --csv="./resultados/${tipo_teste[$j]}/api-${tipo_api[$x]}-java/api-${tipo_api[$x]}-java_${tipo_teste[$j]}_u${u[$j]}_r${r[$j]}"
+  done
+done
 
-# api_url_kotlin=(
-#   "http://kotlin-rest:8084"
-#   "http://kotlin-soap:8085"
-#   "http://kotlin-graphql:8087"
-# )
+api_url_kotlin=(
+  "http://kotlin-rest:8084"
+  "http://kotlin-soap:8085"
+  "http://kotlin-graphql:8087"
+)
 
-# # KOTLIN LOCUST
-# for j in "${!tipo_teste[@]}"; do
-#   for x in "${!tipo_api[@]}"; do
-#     docker compose run --rm locust -f "teste-carga-${tipo_api[$x]}-kotlin.py" \
-#       --host="${api_url_kotlin[$x]}" \
-#       --headless \
-#       -u "${u[$j]}" \
-#       -r "${r[$j]}" \
-#       -t 2s \
-#       --csv="./resultados/${tipo_teste[$j]}/api-${tipo_api[$x]}-kotlin/api-${tipo_api[$x]}-kotlin_${tipo_teste[$j]}_u${u[$j]}_r${r[$j]}"
-#   done
-# done
+# KOTLIN LOCUST
+for j in "${!tipo_teste[@]}"; do
+  for x in "${!tipo_api[@]}"; do
+    docker compose run --rm locust -f "teste-carga-${tipo_api[$x]}-kotlin.py" \
+      --host="${api_url_kotlin[$x]}" \
+      --headless \
+      -u "${u[$j]}" \
+      -r "${r[$j]}" \
+      -t 1m \
+      --csv="./resultados/${tipo_teste[$j]}/api-${tipo_api[$x]}-kotlin/api-${tipo_api[$x]}-kotlin_${tipo_teste[$j]}_u${u[$j]}_r${r[$j]}"
+  done
+done
 
 linguagem=("java" "kotlin")
 
@@ -94,12 +94,13 @@ for a in "${!linguagem[@]}"; do
         --call "$service" \
         -d '{}' \
         -c "$carga" \
-        -z 2s \
+        -z 1m \
         -O json \
         -o "/resultados-grpc/${tipo_teste[$j]}/api-grpc-${linguagem_atual}/api-grpc-${linguagem_atual}_${proto}_get_u${carga}.json" \
         "$host"
       ret=$?
 
+      echo "ta indo"
       if [ $ret -ne 0 ]; then
         echo "ERRO GET: $linguagem_atual | $service"
       fi
@@ -138,7 +139,7 @@ for a in "${!linguagem[@]}"; do
         --call "$service" \
         -d "$payload" \
         -c "$carga" \
-        -z 2s \
+        -z 1m \
         -O json \
         -o "/resultados-grpc/${tipo_teste[$j]}/api-grpc-${linguagem_atual}/api-grpc-${linguagem_atual}_${proto}_post_u${carga}.json" \
         "$host"

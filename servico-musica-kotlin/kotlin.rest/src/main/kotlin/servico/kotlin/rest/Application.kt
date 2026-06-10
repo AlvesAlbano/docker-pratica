@@ -8,6 +8,5 @@ object Application {
     @kotlin.jvm.JvmStatic
     fun main(args: Array<String>) {
         SpringApplication.run(Application::class.java, *args)
-        println("http://localhost:8080/swagger-ui/index.html#/")
     }
 }

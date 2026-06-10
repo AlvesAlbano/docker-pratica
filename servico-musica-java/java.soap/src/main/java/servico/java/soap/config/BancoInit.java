@@ -20,9 +20,13 @@ public class BancoInit {
     @Bean
     CommandLineRunner commandLineRunner(MusicaRepository musicaRepository, PlaylistRepository playlistRepository, UsuarioRepository usuarioRepository) {
 
+        final int QTD_MUSICAS = 1000;
+        final int QTD_USUARIOS = 1000;
+        final int QTD_MUSICAS_PLAYLIST = 4;
+
         return args -> {
             // popular musica repo
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < QTD_MUSICAS; i++) {
                 musicaRepository.save(
                         new Musica(
                                 String.format("Musica %d",i),
@@ -36,7 +40,7 @@ public class BancoInit {
             int max = 45;
             short idade;
 
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < QTD_USUARIOS; i++) {
                 idade = (short) (min + (int)(Math.random() * ((max - min) + 1)));
                 usuarioRepository.save(
                         new Usuario(
@@ -64,7 +68,7 @@ public class BancoInit {
                 List<Musica> copia = new ArrayList<>(musicas);
                 Collections.shuffle(copia);
 
-                playlist.getMusicas().addAll(copia.subList(0, 3));
+                playlist.getMusicas().addAll(copia.subList(0, QTD_MUSICAS_PLAYLIST));
 
                 playlistRepository.save(playlist);
             }
