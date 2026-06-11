@@ -9,25 +9,7 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 
 def load_data():
-    df_http = pd.read_csv("csv_junto.csv")
-    df_grpc = pd.read_csv("grpc_stats.csv")
-
-    # padronizar nomes
-    df_http["tipo_api"] = df_http["tipo_api"].str.lower()
-    df_grpc["tipo_api"] = df_grpc["tipo_api"].str.lower()
-
-    # manter apenas colunas comuns
-    common_cols = list(
-        set(df_http.columns).intersection(df_grpc.columns)
-    )
-
-    df = pd.concat(
-        [
-            df_http[common_cols],
-            df_grpc[common_cols]
-        ],
-        ignore_index=True
-    )
+    df = pd.read_csv("csv_junto.csv")
 
     return df
 

@@ -73,11 +73,14 @@ services:
           - 8087:8087
 
     locust:
-      image: locustio/locust
+      build:
+        context: .
+        dockerfile: Dockerfile
+      image: locust
       container_name: locust
+      # command: >
+        # -f /mnt/locust/teste-carga-grpc-kotlin.py
       ports:
-        - 8088:8088
+        - 8089:8089
       volumes:
         - ./locust:/mnt/locust
-        - ./data:/mnt/data
-      working_dir: /mnt/locust

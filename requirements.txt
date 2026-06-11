@@ -14,6 +14,9 @@ fonttools==4.63.0
 gevent==25.9.1
 geventhttpclient==2.3.9
 greenlet==3.5.1
+grpc-interceptor==0.15.4
+grpcio==1.81.0
+grpcio-tools==1.81.0
 h11==0.16.0
 idna==3.18
 iniconfig==2.3.0
@@ -29,6 +32,7 @@ packaging==26.2
 pandas==3.0.3
 pillow==12.2.0
 pluggy==1.6.0
+protobuf==6.33.6
 psutil==7.2.2
 Pygments==2.20.0
 pyparsing==3.3.2
@@ -38,8 +42,10 @@ python-engineio==4.13.2
 python-socketio==5.16.2
 pyzmq==27.1.0
 requests==2.34.2
+setuptools==82.0.1
 simple-websocket==1.1.0
 six==1.17.0
+typing_extensions==4.15.0
 urllib3==2.7.0
 websocket-client==1.9.0
 Werkzeug==3.1.8

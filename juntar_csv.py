@@ -16,7 +16,7 @@ for arquivo in BASE_DIR.rglob("*_stats.csv"):
     # Exemplo esperado:
     # api-rest-kotlin_pesado_u300_r45_stats
     padrao = (
-        r"api-(rest|graphql|soap)-"
+        r"api-(rest|graphql|soap|grpc)-"
         r"(java|kotlin)_"
         r"(leve|medio|pesado)_"
         r"u(\d+)_r(\d+)_stats"

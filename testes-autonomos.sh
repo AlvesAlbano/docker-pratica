@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# =========================
+# CONFIGURAÇÕES
+# =========================
+
 tipo_teste=("leve" "medio" "pesado")
 tipo_api=("rest" "soap" "graphql")
 
@@ -12,18 +16,35 @@ api_url_java=(
   "http://java-graphql:8083"
 )
 
-# JAVA LOCUST
+# # =========================
+# # JAVA LOCUST
+# # =========================
+
 for j in "${!tipo_teste[@]}"; do
   for x in "${!tipo_api[@]}"; do
-    docker compose run --rm locust -f "teste-carga-${tipo_api[$x]}-java.py" \
-      --host="${api_url_java[$x]}" \
+
+    test="${tipo_teste[$j]}"
+    api="${tipo_api[$x]}"
+    users="${u[$j]}"
+    rate="${r[$j]}"
+    host="${api_url_java[$x]}"
+
+    docker compose run --rm locust \
+      -f "/mnt/locust/teste-carga-${api}-java.py" \
+      --host="$host" \
       --headless \
-      -u "${u[$j]}" \
-      -r "${r[$j]}" \
-      -t 1m \
-      --csv="./resultados/${tipo_teste[$j]}/api-${tipo_api[$x]}-java/api-${tipo_api[$x]}-java_${tipo_teste[$j]}_u${u[$j]}_r${r[$j]}"
+      -u "$users" \
+      -r "$rate" \
+      -t 3m \
+      --csv="/mnt/locust/resultados/${test}/api-${api}-java/api-${api}-java_${test}_u${users}_r${rate}"
+
+    echo "bora krl"
   done
 done
+
+# =========================
+# KOTLIN CONFIG
+# =========================
 
 api_url_kotlin=(
   "http://kotlin-rest:8084"
@@ -31,124 +52,70 @@ api_url_kotlin=(
   "http://kotlin-graphql:8087"
 )
 
+# =========================
 # KOTLIN LOCUST
+# =========================
+
 for j in "${!tipo_teste[@]}"; do
   for x in "${!tipo_api[@]}"; do
-    docker compose run --rm locust -f "teste-carga-${tipo_api[$x]}-kotlin.py" \
-      --host="${api_url_kotlin[$x]}" \
+
+    test="${tipo_teste[$j]}"
+    api="${tipo_api[$x]}"
+    users="${u[$j]}"
+    rate="${r[$j]}"
+    host="${api_url_kotlin[$x]}"
+
+    docker compose run --rm locust \
+      -f "/mnt/locust/teste-carga-${api}-kotlin.py" \
+      --host="$host" \
       --headless \
-      -u "${u[$j]}" \
-      -r "${r[$j]}" \
-      -t 1m \
-      --csv="./resultados/${tipo_teste[$j]}/api-${tipo_api[$x]}-kotlin/api-${tipo_api[$x]}-kotlin_${tipo_teste[$j]}_u${u[$j]}_r${r[$j]}"
+      -u "$users" \
+      -r "$rate" \
+      -t 3m \
+      --csv="/mnt/locust/resultados/${test}/api-${api}-kotlin/api-${api}-kotlin_${test}_u${users}_r${rate}"
+
   done
 done
+
+# =========================
+# GRPC CONFIG
+# =========================
 
 linguagem=("java" "kotlin")
 
-grpc_get=(
-  "MusicaService.TodasAsMusicas musica"
-  "UsuarioService.TodosUsuarios usuario"
-)
+# =========================
+# GRPC LOCUST
+# =========================
 
-grpc_post=(
-  'PlaylistService.PlaylistsPorUsuario playlist {"idUsuario": 8}'
-  'PlaylistService.PlaylistsPorMusica playlist {"idMusica": 8}'
-)
+for lang in "${linguagem[@]}"; do
+  for j in "${!u[@]}"; do
 
-grpc_users=(100 200 300)
+    usuarios="${u[$j]}"
+    spawn="${r[$j]}"
+    test="${tipo_teste[$j]}"
+    
+    # echo "FILE=$file"
+    
+    if [ "$lang" = "java" ]; then
+      host="http://java-grpc:8082"
+      csv="resultados/${test}/api-grpc-java"
+      file="/mnt/locust/teste-carga-grpc-java.py"
+    else
+      host="http://kotlin-grpc:8086"
+      csv="resultados/${test}/api-grpc-kotlin"
+      file="/mnt/locust/teste-carga-grpc-kotlin.py"
+    fi
+    docker compose run --rm locust \
+      -f "$file" \
+      --host="$host" \
+      --headless \
+      -u "$usuarios" \
+      -r "$spawn" \
+      -t 3m \
+      --csv="/mnt/locust/${csv}/api-grpc-${lang}_${test}_u${usuarios}_r${spawn}"
 
-mkdir -p resultados-grpc/{leve,medio,pesado}/api-grpc-java
-mkdir -p resultados-grpc/{leve,medio,pesado}/api-grpc-kotlin
-
-# sudo chown -R $USER:$USER resultados-grpc/{leve,medio,pesado}/api-grpc-java
-# sudo chown -R $USER:$USER resultados-grpc/{leve,medio,pesado}/api-grpc-kotlin
-
-# GRPC GET
-for a in "${!linguagem[@]}"; do
-  for j in "${!tipo_teste[@]}"; do
-    for s in "${!grpc_get[@]}"; do
-
-      linguagem_atual="${linguagem[$a]}"
-      service=$(echo "${grpc_get[$s]}" | awk '{print $1}')
-      proto=$(echo "${grpc_get[$s]}" | awk '{print $2}')
-      carga="${grpc_users[$j]}"
-
-      if [ "$linguagem_atual" = "java" ]; then
-        host="java-grpc:8082"
-        protoPath="/protos/java/"
-      else
-        host="kotlin-grpc:8086"
-        protoPath="/protos/kotlin/"
-      fi
-
-      docker run --rm \
-        --user "$(id -u):$(id -g)" \
-        --network docker-pratica_default \
-        -v "$(pwd)/servico-musica-java/java.grpc/src/main/proto:/protos/java" \
-        -v "$(pwd)/servico-musica-kotlin/kotlin.grpc/src/main/proto:/protos/kotlin" \
-        -v "$(pwd)/resultados-grpc:/resultados-grpc" \
-        ghcr.io/bojand/ghz:latest \
-        --insecure \
-        --proto "${protoPath}${proto}.proto" \
-        --call "$service" \
-        -d '{}' \
-        -c "$carga" \
-        -z 1m \
-        -O json \
-        -o "/resultados-grpc/${tipo_teste[$j]}/api-grpc-${linguagem_atual}/api-grpc-${linguagem_atual}_${proto}_get_u${carga}.json" \
-        "$host"
-      ret=$?
-
-      echo "ta indo"
-      if [ $ret -ne 0 ]; then
-        echo "ERRO GET: $linguagem_atual | $service"
-      fi
-
-    done
   done
 done
 
-for a in "${!linguagem[@]}"; do
-  for j in "${!tipo_teste[@]}"; do
-    for s in "${!grpc_post[@]}"; do
-
-      linguagem_atual="${linguagem[$a]}"
-      service=$(echo "${grpc_post[$s]}" | awk '{print $1}')
-      proto=$(echo "${grpc_post[$s]}" | awk '{print $2}')
-      payload=$(echo "${grpc_post[$s]}" | cut -d' ' -f3-)
-      carga="${grpc_users[$j]}"
-
-      if [ "$linguagem_atual" = "java" ]; then
-        host="java-grpc:8082"
-        protoPath="/protos/java/"
-      else
-        host="kotlin-grpc:8086"
-        protoPath="/protos/kotlin/"
-      fi
-
-      docker run --rm \
-        --user "$(id -u):$(id -g)" \
-        --network docker-pratica_default \
-        -v "$(pwd)/servico-musica-java/java.grpc/src/main/proto:/protos/java" \
-        -v "$(pwd)/servico-musica-kotlin/kotlin.grpc/src/main/proto:/protos/kotlin" \
-        -v "$(pwd)/resultados-grpc:/resultados-grpc" \
-        ghcr.io/bojand/ghz:latest \
-        --insecure \
-        --proto "${protoPath}${proto}.proto" \
-        --call "$service" \
-        -d "$payload" \
-        -c "$carga" \
-        -z 1m \
-        -O json \
-        -o "/resultados-grpc/${tipo_teste[$j]}/api-grpc-${linguagem_atual}/api-grpc-${linguagem_atual}_${proto}_post_u${carga}.json" \
-        "$host"
-      ret=$?
-
-      if [ $ret -ne 0 ]; then
-        echo "ERRO POST: $linguagem_atual | $service"
-      fi
-
-    done
-  done
-done
+echo
+echo "Execução finalizada!"
