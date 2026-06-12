@@ -9,6 +9,9 @@ Autores: Samir Alves - 2315046
 
 Este trabalho compara quatro tecnologias de invocação de serviços remotos - **REST**, **SOAP**, **GraphQL** e **gRPC** - por meio da implementação de um serviço de streaming de músicas em **Java** e **Kotlin**, seguida de testes de carga com a ferramenta **Locust**. Toda a infraestrutura é containerizada via **Docker Compose**.
 
+## Pendências Resolvidas / Mudanças Feitas
+Os testes agora estão sendo feitos no conteiner do Locust usando uma biblioteca de requisição gPRC.
+
 ## Infraestrutura
 
 - **Spring Boot**: framework utilizado para implementar todos os serviços, tanto em Java quanto em Kotlin
